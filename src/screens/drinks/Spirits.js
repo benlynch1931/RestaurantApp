@@ -31,37 +31,25 @@ const Spirits = (props) => {
     
       <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
         <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-          <Text style={textStyle}></Text>
+          <Text style={textStyle}>Spirit</Text>
         </TouchableOpacity>
       </View>
     
       <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
         <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-          <Text style={textStyle}></Text>
+          <Text style={textStyle}>Premium Spirit</Text>
         </TouchableOpacity>
       </View>
       
       <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
         <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-          <Text style={textStyle}></Text>
+          <Text style={textStyle}>Mixer</Text>
         </TouchableOpacity>
       </View>
       
       <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
         <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-          <Text style={textStyle}></Text>
-        </TouchableOpacity>
-      </View>
-      
-      <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-        <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-          <Text style={textStyle}></Text>
-        </TouchableOpacity>
-      </View>
-      
-      <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-        <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-          <Text style={textStyle}></Text>
+          <Text style={textStyle}>Premium Mixer</Text>
         </TouchableOpacity>
       </View>
       
