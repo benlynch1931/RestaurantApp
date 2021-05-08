@@ -17,13 +17,13 @@ const SoftDrinks = (props) => {
   
   const touchableStyle = {
     width: wp("80%"),
-    paddingTop: hp('0.5%'),
-    paddingBottom: hp('0.5%')
+    paddingTop: hp('0.75%'),
+    paddingBottom: hp('0.75%')
   }
   
   const textStyle = {
     textAlign: 'center',
-    fontSize: hp('5%')
+    fontSize: hp('4%')
   }
   
   return (
@@ -31,37 +31,85 @@ const SoftDrinks = (props) => {
     
       <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
         <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-          <Text style={textStyle}></Text>
+          <Text style={textStyle}>Appletiser</Text>
+        </TouchableOpacity>
+      </View>
+      
+      <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
+        <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
+          <Text style={textStyle}>Coffee</Text>
         </TouchableOpacity>
       </View>
     
       <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
         <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-          <Text style={textStyle}></Text>
+          <Text style={textStyle}>Coke</Text>
         </TouchableOpacity>
       </View>
       
       <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
         <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-          <Text style={textStyle}></Text>
+          <Text style={textStyle}>Coke BOTTLE</Text>
         </TouchableOpacity>
       </View>
       
       <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
         <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-          <Text style={textStyle}></Text>
+          <Text style={textStyle}>Cordial</Text>
         </TouchableOpacity>
       </View>
       
       <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
         <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-          <Text style={textStyle}></Text>
+          <Text style={textStyle}>Diet Coke</Text>
         </TouchableOpacity>
       </View>
       
       <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
         <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-          <Text style={textStyle}></Text>
+          <Text style={textStyle}>Diet Coke BOTTLE</Text>
+        </TouchableOpacity>
+      </View>
+      
+      <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
+        <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
+          <Text style={textStyle}>Fentimans</Text>
+        </TouchableOpacity>
+      </View>
+      
+      <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
+        <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
+          <Text style={textStyle}>Fever Tree Tonic</Text>
+        </TouchableOpacity>
+      </View>
+      
+      <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
+        <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
+          <Text style={textStyle}>Frobishers</Text>
+        </TouchableOpacity>
+      </View>
+      
+      <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
+        <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
+          <Text style={textStyle}>J2O BOTTLE</Text>
+        </TouchableOpacity>
+      </View>
+      
+      <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
+        <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
+          <Text style={textStyle}>Schweppes</Text>
+        </TouchableOpacity>
+      </View>
+      
+      <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
+        <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
+          <Text style={textStyle}>Sparkling Water</Text>
+        </TouchableOpacity>
+      </View>
+      
+      <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
+        <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
+          <Text style={textStyle}>Tea</Text>
         </TouchableOpacity>
       </View>
       
