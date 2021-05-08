@@ -27,7 +27,7 @@ const Ciders = (props) => {
   }
   
   return (
-    <ScrollView style={{ width: wp('100%'), backgroundColor: '#E9E9E9', height: hp('90%') }}>
+    <ScrollView style={{ width: wp('100%'), backgroundColor: '#E9E9E9', height: hp('82.5%') }}>
     
       <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
         <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
