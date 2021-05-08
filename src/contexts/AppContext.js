@@ -8,7 +8,8 @@ class AppContextProvider extends Component {
     section: 'home',
     previousSection: null,
     title: 'Home',
-    total: 0
+    total: 0,
+    basket: []
   }
 
   setSection = (newSection, previousSection) => {
@@ -20,13 +21,19 @@ class AppContextProvider extends Component {
     this.setState({ title: newTitle })
   }
   
+  addToTotal = (addition) => {
+    this.setState({ total: addition })
+  }
+  
 
   render() {
     return (
       <AppContext.Provider value={{
         ...this.state,
         setSection: this.setSection,
-        setTitle: this.setTitle
+        setTitle: this.setTitle,
+        addToTotal: this.addToTotal,
+        addToBasket: this.addToBasket
       }}>
       {this.props.children}
       </AppContext.Provider>
