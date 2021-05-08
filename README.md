@@ -1,3 +1,1 @@
-// Context
-
-- off or on?
+`addToBasket([...basket, [ale.label, ale.price]])`
