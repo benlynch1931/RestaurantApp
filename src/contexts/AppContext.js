@@ -25,6 +25,18 @@ class AppContextProvider extends Component {
     this.setState({ total: addition })
   }
   
+  removeFromTotal = (subtraction) => {
+    this.setState({ total: subtraction })
+  }
+  
+  addToBasket = (basket) => {
+    this.setState({ basket: basket })
+  }
+  
+  removeFromBasket = (basket) => {
+    this.setState({ basket: basket })
+  }
+  
 
   render() {
     return (
@@ -33,7 +45,9 @@ class AppContextProvider extends Component {
         setSection: this.setSection,
         setTitle: this.setTitle,
         addToTotal: this.addToTotal,
-        addToBasket: this.addToBasket
+        removeFromTotal: this.removeFromTotal,
+        addToBasket: this.addToBasket,
+        removeFromBasket: this.removeFromBasket
       }}>
       {this.props.children}
       </AppContext.Provider>
