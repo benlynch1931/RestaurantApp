@@ -32,7 +32,7 @@ const Ales = (props) => {
     fontSize: hp('5%')
   }
   
-  let renderedDrinks = []
+  
   
   const drinks = [
     {
@@ -91,6 +91,7 @@ const Ales = (props) => {
   }
   
   const renderDrinks = () => {
+    let renderedDrinks = []
     drinks.forEach((ale, idx) => {
       renderedDrinks.push(
         <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
