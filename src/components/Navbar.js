@@ -20,8 +20,6 @@ const Navbar = (props) => {
     }
     const newTotal = total - itemPrice
     removeFromTotal(newTotal)
-    
-    
   }
   
   const iterateBasketItems = () => {
@@ -34,8 +32,6 @@ const Navbar = (props) => {
               <Text style={{ fontSize: hp('3%') }}>X</Text>
             </TouchableOpacity>
           </View>
-          
-
           
           <View style={{ position: 'absolute', left: wp('12.5%') }}>
             <Text style={{ fontSize: hp('3%') }}>{item[0]}</Text>
