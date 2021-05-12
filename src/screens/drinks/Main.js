@@ -36,7 +36,9 @@ const Main = (props) => {
   
   const textStyle = {
     fontSize: hp('5%'),
-    textAlign: 'center'
+    textAlign: 'center',
+    lineHeight: hp('5%'),
+    marginTop: hp('7.5%')
   }
   
   return (
@@ -72,7 +74,7 @@ const Main = (props) => {
       
       <View style={optionStyle}>
         <TouchableOpacity style={touchableStyle} onPress={() => { setScreen('softs'); setTitle('Soft Drinks') }}>
-          <Text style={textStyle}>Soft Drinks</Text>
+          <Text style={[textStyle, { marginTop: hp('5%') }]}>Soft Drinks</Text>
           </TouchableOpacity>
       </View>
       
