@@ -85,7 +85,7 @@ const Ales = (props) => {
     }
   ]
   
-  const addToBasket = (ale) => {
+  const pressAddToBasket = (ale) => {
     addToTotal(ale.price + total)
     addToBasket([...basket, [ale.label, ale.price]])
   }
@@ -94,7 +94,7 @@ const Ales = (props) => {
     drinks.forEach((ale, idx) => {
       renderedDrinks.push(
         <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-          <TouchableOpacity style={touchableStyle} onPress={() => { addToBasket(ale) }}>
+          <TouchableOpacity style={touchableStyle} onPress={() => { pressAddToBasket(ale) }}>
             <Text style={textStyle}>{ale.label}</Text>
           </TouchableOpacity>
         </View>
@@ -111,60 +111,7 @@ const Ales = (props) => {
 
 
   
-  
-  // return (
-  //   <ScrollView style={{ width: wp('100%'), backgroundColor: '#E9E9E9', height: hp('90%') }}>
-  // 
-  //     <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-  //       <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-  //         <Text style={textStyle}>Batch</Text>
-  //       </TouchableOpacity>
-  //     </View>
-  // 
-  //     <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-  //       <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-  //         <Text style={textStyle}>Bath Gem</Text>
-  //       </TouchableOpacity>
-  //     </View>
-  // 
-  //     <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-  //       <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-  //         <Text style={textStyle}>Butcombe</Text>
-  //       </TouchableOpacity>
-  //     </View>
-  // 
-  //     <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-  //       <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-  //         <Text style={textStyle}>Guest Ale</Text>
-  //       </TouchableOpacity>
-  //     </View>
-  // 
-  //     <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-  //       <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-  //         <Text style={textStyle}>Guinnes</Text>
-  //       </TouchableOpacity>
-  //     </View>
-  // 
-  //     <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-  //       <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-  //         <Text style={textStyle}>Otter</Text>
-  //       </TouchableOpacity>
-  //     </View>
-  // 
-  //     <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-  //       <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-  //         <Text style={textStyle}>Palmers</Text>
-  //       </TouchableOpacity>
-  //     </View>
-  // 
-  //     <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-  //       <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-  //         <Text style={textStyle}>Tribute</Text>
-  //       </TouchableOpacity>
-  //     </View>
-  // 
-  //   </ScrollView>
-  // )
+
 }
 
 export default Ales;
