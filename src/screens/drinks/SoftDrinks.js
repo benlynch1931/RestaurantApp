@@ -3,7 +3,11 @@ import { View, Text, TouchableOpacity, Image, StyleSheet, ScrollView } from 'rea
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
+import { AppContext } from '../../contexts/AppContext';
+
 const SoftDrinks = (props) => {
+  
+  const { addToTotal, total, addToBasket, basket } = useContext(AppContext)
   
   const optionStyle = {
     width: wp('80%'),
@@ -26,95 +30,89 @@ const SoftDrinks = (props) => {
     fontSize: hp('4%')
   }
   
-  return (
-    <ScrollView style={{ width: wp('100%'), backgroundColor: '#E9E9E9', height: hp('82.5%') }}>
-    
-      <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-        <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-          <Text style={textStyle}>Appletiser</Text>
-        </TouchableOpacity>
-      </View>
-      
-      <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-        <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-          <Text style={textStyle}>Coffee</Text>
-        </TouchableOpacity>
-      </View>
-    
-      <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-        <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-          <Text style={textStyle}>Coke</Text>
-        </TouchableOpacity>
-      </View>
-      
-      <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-        <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-          <Text style={textStyle}>Coke BOTTLE</Text>
-        </TouchableOpacity>
-      </View>
-      
-      <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-        <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-          <Text style={textStyle}>Cordial</Text>
-        </TouchableOpacity>
-      </View>
-      
-      <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-        <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-          <Text style={textStyle}>Diet Coke</Text>
-        </TouchableOpacity>
-      </View>
-      
-      <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-        <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-          <Text style={textStyle}>Diet Coke BOTTLE</Text>
-        </TouchableOpacity>
-      </View>
-      
-      <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-        <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-          <Text style={textStyle}>Fentimans</Text>
-        </TouchableOpacity>
-      </View>
-      
-      <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-        <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-          <Text style={textStyle}>Fever Tree Tonic</Text>
-        </TouchableOpacity>
-      </View>
-      
-      <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-        <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-          <Text style={textStyle}>Frobishers</Text>
-        </TouchableOpacity>
-      </View>
-      
-      <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-        <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-          <Text style={textStyle}>J2O BOTTLE</Text>
-        </TouchableOpacity>
-      </View>
-      
-      <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-        <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-          <Text style={textStyle}>Schweppes</Text>
-        </TouchableOpacity>
-      </View>
-      
-      <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-        <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-          <Text style={textStyle}>Sparkling Water</Text>
-        </TouchableOpacity>
-      </View>
-      
-      <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-        <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-          <Text style={textStyle}>Tea</Text>
-        </TouchableOpacity>
-      </View>
-      
-    </ScrollView>
-  )
+  const drinks = [
+    {
+      label: 'Appletiser',
+      price: 0
+    },
+    {
+      label: 'Coffee',
+      price: 2.25
+    },
+    {
+      label: 'Coke',
+      price: 3.20
+    },
+    {
+      label: 'Coke BOTTLE',
+      price: 1.85
+    },
+    {
+      label: 'Cordial',
+      price: 1.00
+    },
+    {
+      label: 'Diet Coke',
+      price: 3.20
+    },
+    {
+      label: 'Diet Coke BOTTLE',
+      price: 1.85
+    },
+    {
+      label: 'Fentimans',
+      price: 3.20
+    },
+    {
+      label: 'Fever Tree Tonic',
+      price: 0
+    },
+    {
+      label: 'Frobishers',
+      price: 0
+    },
+    {
+      label: 'J2O BOTTLE',
+      price: 2.60
+    },
+    {
+      label: 'Schweppes',
+      price: 0
+    },
+    {
+      label: 'Sparkling Water',
+      price: 0
+    },
+    {
+      label: 'Tea',
+      price: 2.20
+    }
+  ]
+  
+  const pressAddToBasket = (softDrink) => {
+    addToTotal(softDrink.price + total)
+    addToBasket([...basket, [softDrink.label, softDrink.price]])
+  }
+  
+  const renderDrinks = () => {
+    let renderedDrinks = []
+    drinks.forEach((softDrink, idx) => {
+      renderedDrinks.push(
+        <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
+          <TouchableOpacity style={touchableStyle} onPress={() => { pressAddToBasket(softDrink) }}>
+            <Text style={textStyle}>{softDrink.label}</Text>
+          </TouchableOpacity>
+        </View>
+      )
+    });
+    return renderedDrinks
+  }
+
+    return (
+      <ScrollView style={{ width: wp('100%'), backgroundColor: '#E9E9E9', height: hp('82.5%') }}>
+        { renderDrinks() }
+      </ScrollView>
+    )
 }
 
 export default SoftDrinks;

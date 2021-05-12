@@ -3,7 +3,11 @@ import { View, Text, TouchableOpacity, Image, StyleSheet, ScrollView } from 'rea
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
+import { AppContext } from '../../contexts/AppContext';
+
 const Spirits = (props) => {
+  
+  const { addToTotal, total, addToBasket, basket } = useContext(AppContext)
   
   const optionStyle = {
     width: wp('80%'),
@@ -26,35 +30,49 @@ const Spirits = (props) => {
     fontSize: hp('5%')
   }
   
-  return (
-    <ScrollView style={{ width: wp('100%'), backgroundColor: '#E9E9E9', height: hp('82.5%') }}>
-    
-      <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-        <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-          <Text style={textStyle}>Spirit</Text>
-        </TouchableOpacity>
-      </View>
-    
-      <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-        <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-          <Text style={textStyle}>Premium Spirit</Text>
-        </TouchableOpacity>
-      </View>
-      
-      <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-        <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-          <Text style={textStyle}>Mixer</Text>
-        </TouchableOpacity>
-      </View>
-      
-      <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-        <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-          <Text style={textStyle}>Premium Mixer</Text>
-        </TouchableOpacity>
-      </View>
-      
-    </ScrollView>
-  )
+  const drinks = [
+    {
+      label: 'Spirit',
+      price: 3.20
+    },
+    {
+      label: 'Premium Spirit',
+      price: 3.45
+    },
+    {
+      label: 'Mixer',
+      price: 3.60
+    },
+    {
+      label: 'Premium Mixer',
+      price: 3.80
+    }
+  ]
+  
+  const pressAddToBasket = (ale) => {
+    addToTotal(ale.price + total)
+    addToBasket([...basket, [ale.label, ale.price]])
+  }
+  
+  const renderDrinks = () => {
+    let renderedDrinks = []
+    drinks.forEach((ale, idx) => {
+      renderedDrinks.push(
+        <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
+          <TouchableOpacity style={touchableStyle} onPress={() => { pressAddToBasket(ale) }}>
+            <Text style={textStyle}>{ale.label}</Text>
+          </TouchableOpacity>
+        </View>
+      )
+    });
+    return renderedDrinks
+  }
+
+    return (
+      <ScrollView style={{ width: wp('100%'), backgroundColor: '#E9E9E9', height: hp('82.5%') }}>
+        { renderDrinks() }
+      </ScrollView>
+    )
 }
 
 export default Spirits;

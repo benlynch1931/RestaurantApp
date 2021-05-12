@@ -3,7 +3,11 @@ import { View, Text, TouchableOpacity, Image, StyleSheet, ScrollView } from 'rea
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
+import { AppContext } from '../../contexts/AppContext';
+
 const Ciders = (props) => {
+  
+  const { addToTotal, total, addToBasket, basket } = useContext(AppContext)
   
   const optionStyle = {
     width: wp('80%'),
@@ -26,39 +30,51 @@ const Ciders = (props) => {
     fontSize: hp('5%')
   }
   
+  const drinks = [
+    {
+      label: 'Ashton Press',
+      price: 3.65
+    },
+    {
+      label: 'Black Rat',
+      price: 3.50
+    },
+    {
+      label: 'Dry',
+      price: 3.65
+    },
+    {
+      label: 'Haze',
+      price: 3.80
+    },
+    {
+      label: 'Rattler',
+      price: 4.40
+    }
+  ]
+  
+  const pressAddToBasket = (ale) => {
+    addToTotal(ale.price + total)
+    addToBasket([...basket, [ale.label, ale.price]])
+  }
+  
+  const renderDrinks = () => {
+    let renderedDrinks = []
+    drinks.forEach((cider, idx) => {
+      renderedDrinks.push(
+        <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
+          <TouchableOpacity style={touchableStyle} onPress={() => { pressAddToBasket(cider) }}>
+            <Text style={textStyle}>{cider.label}</Text>
+          </TouchableOpacity>
+        </View>
+      )
+    });
+    return renderedDrinks
+  }
+  
   return (
     <ScrollView style={{ width: wp('100%'), backgroundColor: '#E9E9E9', height: hp('82.5%') }}>
-    
-      <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-        <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-          <Text style={textStyle}>Ashton Press</Text>
-        </TouchableOpacity>
-      </View>
-    
-      <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-        <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-          <Text style={textStyle}>Black Rat</Text>
-        </TouchableOpacity>
-      </View>
-      
-      <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-        <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-          <Text style={textStyle}>Dry</Text>
-        </TouchableOpacity>
-      </View>
-      
-      <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-        <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-          <Text style={textStyle}>Haze</Text>
-        </TouchableOpacity>
-      </View>
-      
-      <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-        <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-          <Text style={textStyle}>Rattler</Text>
-        </TouchableOpacity>
-      </View>
-      
+      { renderDrinks() }
     </ScrollView>
   )
 }

@@ -3,7 +3,11 @@ import { View, Text, TouchableOpacity, Image, StyleSheet, ScrollView } from 'rea
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
+import { AppContext } from '../../contexts/AppContext';
+
 const Lagers = (props) => {
+  
+  const { addToTotal, total, addToBasket, basket } = useContext(AppContext)
   
   const optionStyle = {
     width: wp('80%'),
@@ -26,47 +30,57 @@ const Lagers = (props) => {
     fontSize: hp('5%')
   }
   
-  return (
-    <ScrollView style={{ width: wp('100%'), backgroundColor: '#E9E9E9', height: hp('82.5%') }}>
-    
-      <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-        <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-          <Text style={textStyle}>Becks</Text>
-        </TouchableOpacity>
-      </View>
-    
-      <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-        <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-          <Text style={textStyle}>Budweiser</Text>
-        </TouchableOpacity>
-      </View>
-      
-      <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-        <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-          <Text style={textStyle}>Carlsberg</Text>
-        </TouchableOpacity>
-      </View>
-      
-      <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-        <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-          <Text style={textStyle}>Crabbies</Text>
-        </TouchableOpacity>
-      </View>
-      
-      <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-        <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-          <Text style={textStyle}>Kronenbourg</Text>
-        </TouchableOpacity>
-      </View>
-      
-      <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-        <TouchableOpacity style={touchableStyle} onPress={() => {  }}>
-          <Text style={textStyle}>Peroni</Text>
-        </TouchableOpacity>
-      </View>
-      
-    </ScrollView>
-  )
+  const drinks = [
+    {
+      label: 'Becks',
+      price: 4.25
+    },
+    {
+      label: 'Budweiser',
+      price: 3.30
+    },
+    {
+      label: 'Carlsberg',
+      price: 4.15
+    },
+    {
+      label: 'Crabbies',
+      price: 0
+    },
+    {
+      label: 'Kronenbourg',
+      price: 4.25
+    },
+    {
+      label: 'Peroni',
+      price: 2.60
+    }
+  ]
+  
+  const pressAddToBasket = (lager) => {
+    addToTotal(lager.price + total)
+    addToBasket([...basket, [lager.label, lager.price]])
+  }
+  
+  const renderDrinks = () => {
+    let renderedDrinks = []
+    drinks.forEach((lager, idx) => {
+      renderedDrinks.push(
+        <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
+          <TouchableOpacity style={touchableStyle} onPress={() => { pressAddToBasket(lager) }}>
+            <Text style={textStyle}>{lager.label}</Text>
+          </TouchableOpacity>
+        </View>
+      )
+    });
+    return renderedDrinks
+  }
+
+    return (
+      <ScrollView style={{ width: wp('100%'), backgroundColor: '#E9E9E9', height: hp('82.5%') }}>
+        { renderDrinks() }
+      </ScrollView>
+    )
 }
 
 export default Lagers;
