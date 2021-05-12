@@ -12,11 +12,17 @@ const SoftDrinks = (props) => {
   const optionStyle = {
     width: wp('80%'),
     marginTop: hp('2.5%'),
+    marginLeft: wp('10%'),
     backgroundColor: '#FFFFFF',
     shadowColor: '#919191',
     shadowRadius: 5,
     shadowOpacity: 1,
     shadowOffset: { height: 0 } 
+  }
+  
+  const lastOptionStyle = {
+    ...optionStyle,
+    marginBottom: hp('2.5%')
   }
   
   const touchableStyle = {
@@ -98,7 +104,7 @@ const SoftDrinks = (props) => {
     let renderedDrinks = []
     drinks.forEach((softDrink, idx) => {
       renderedDrinks.push(
-        <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
+        <View style={idx == drinks.length - 1  ? lastOptionStyle : optionStyle }>
           <TouchableOpacity style={touchableStyle} onPress={() => { pressAddToBasket(softDrink) }}>
             <Text style={textStyle}>{softDrink.label}</Text>
           </TouchableOpacity>
@@ -109,7 +115,7 @@ const SoftDrinks = (props) => {
   }
 
     return (
-      <ScrollView style={{ width: wp('100%'), backgroundColor: '#E9E9E9', height: hp('82.5%') }}>
+      <ScrollView style={{ width: wp('100%'), backgroundColor: '#E9E9E9', height: hp('82.5%'), paddingBottom: hp('2.5%') }}>
         { renderDrinks() }
       </ScrollView>
     )
