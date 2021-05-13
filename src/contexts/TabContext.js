@@ -5,11 +5,26 @@ export const TabContext = createContext();
 
 class TabContextProvider extends Component {
   state = {
-    tabs: []
+    tabs: [],
+    isCurrentTab: false,
+    currentTabNumber: null,
+    currentTabName: null
   }
   
   addTab = (newTabs) => {
     this.setState({ tabs: newTabs })
+  }
+  
+  setIsCurrentTab = (newBoolean) => {
+    this.setState({ isCurrentTab: newBoolean })
+  }
+  
+  setCurrentTabNumber = (tabNumber) => {
+    this.setState({ currentTabNumber: tabNumber })
+  }
+  
+  setCurrentTabName = (tabName) => {
+    this.setState({ currentTabName: tabName })
   }
 
 
@@ -19,7 +34,10 @@ class TabContextProvider extends Component {
     return (
       <TabContext.Provider value={{
         ...this.state,
-        addTab: this.addTab
+        addTab: this.addTab,
+        setIsCurrentTab: this.setIsCurrentTab,
+        setCurrentTabNumber: this.setCurrentTabNumber,
+        setCurrentTabName: this.setCurrentTabName
       }}>
       {this.props.children}
       </TabContext.Provider>

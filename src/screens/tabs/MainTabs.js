@@ -10,69 +10,13 @@ import { TabContext } from '../../contexts/TabContext.js';
 const MainTabs = (props) => {
 
   const { setSection, setTitle, basket, total, removeFromTotal, removeFromBasket, addToTotal, addToBasket } = useContext(AppContext);
-  const { tabs, addTab } = useContext(TabContext);
+  const { tabs, addTab, isCurrentTab, currentTabNumber, currentTabName, setIsCurrentTab, setCurrentTabNumber, setCurrentTabName } = useContext(TabContext);
   const [ createTabRendering, setCreateTabRendering ] = useState('none')
-  // const [ displayCreateTabButton, setDisplayCreateTabButton ] = useState('block')
   const [ newTabNumber, setNewTabNumber ] = useState('1')
   const [ newTabName, setNewTabName ] = useState(`Table ${newTabNumber}`)
   
   const [test, setTest] = useState(null)
   
-  const optionStyle = {
-    width: wp('80%'),
-    marginTop: hp('5%'),
-    backgroundColor: '#FFFFFF',
-    shadowColor: '#919191',
-    shadowRadius: 5,
-    shadowOpacity: 1,
-    shadowOffset: { height: 0 } 
-  }
-  
-  const textStyle = {
-    fontSize: hp('3%'),
-    color: '#DBDBDB',
-    marginTop: 0,
-    lineHeight: hp('5%'),
-    marginTop: hp('1.25%')
-  }
-  
-  const textInputStyle = { 
-    backgroundColor: '#E4E4E4',
-    width: wp('25%'),
-    height: hp('5%'),
-    shadowColor: '#919191',
-    shadowOffset: { height: 0, width: 0 },
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
-    fontSize: hp('3%'),
-    position: 'absolute',
-    right: 0
-  }
-  
-  const createTabWindowStyle = { 
-    width: wp('90%'),
-    height: hp('40%'),
-    backgroundColor: '#FFFFFF',
-    position: 'absolute',
-    top: hp('25%'),
-    left: wp('5%'),
-    boxSizing: 'border-box',
-    padding: wp('5%') ,
-    shadowColor: '#919191',
-    shadowRadius: 5,
-    shadowOpacity: 1,
-    shadowOffset: { height: 0 } ,
-    zIndex: 9
-  }
-  
-  const textInputLabelStyle = { 
-    fontSize: hp('3%'),
-    lineHeight: hp('3%'),
-    marginTop: hp('1%'),
-    position: 'absolute',
-    textAlign: 'right', 
-    width: wp('30%') 
-  }
   
   const exportTab = (selectedTab) => {
     let tabIndexToExport = 0
@@ -83,6 +27,9 @@ const MainTabs = (props) => {
     });
     addToTotal(tabs[tabIndexToExport].total)
     addToBasket(tabs[tabIndexToExport].basket)
+    setIsCurrentTab(true)
+    setCurrentTabNumber(tabs[tabIndexToExport].number)
+    setCurrentTabName(tabs[tabIndexToExport].name)
     let removedTab = []
     if (tabs.length > 1) {
       removedTab = tabs.splice(tabIndexToExport, 1)
@@ -91,7 +38,22 @@ const MainTabs = (props) => {
   }
   
   const importToTab = (selectedTab) => {
+    let tabToUpdate = tabs[tabs.indexOf(selectedTab)]
+    let newTabs = tabs.splice(tabs.indexOf(selectedTab), 1)
+    addTab(newTabs)
+    tabToUpdate = {
+      name: tabToUpdate.name,
+      number: tabToUpdate.number,
+      basket: [...tabToUpdate.basket, ...basket],
+      total: tabToUpdate.total + total
+    }
     
+    addTab([
+      ...tabs,
+      tabToUpdate
+    ])
+    removeFromTotal(0)
+    removeFromBasket([])
   }
   
   const createTab = () => {
@@ -108,6 +70,9 @@ const MainTabs = (props) => {
     removeFromBasket([])
     setNewTabName('')
     setNewTabNumber('')
+    setIsCurrentTab(false)
+    setCurrentTabNumber(null)
+    setCurrentTabName(null)
     setCreateTabRendering('none')
   }
   
@@ -127,25 +92,25 @@ const MainTabs = (props) => {
           </TouchableOpacity>
         </View>
       
-        <View style={createTabWindowStyle}>
+        <View style={styles.createTabWindowStyle}>
           <View style={{ marginBottom: hp('2.5%') }}>
             <Text style={{ fontSize: hp('3%'), textAlign: 'center' }}>Create a new tab</Text>
           </View>
           <View style={{ position: 'relative', marginBottom: hp('2.5%'), height: hp('6%') }}>
-            <Text style={textInputLabelStyle}>Tab Number: </Text>
+            <Text style={styles.textInputLabelStyle}>Tab Number: </Text>
             <TextInput 
               value={newTabNumber}
               onChangeText={(val) => { setNewTabNumber(val) }}
               keyboardType='numeric'
-              style={textInputStyle}
+              style={styles.textInputStyle}
             />
           </View>
           <View style={{ position: 'relative', marginBottom: hp('5%'), height: hp('6%') }}>
-            <Text style={textInputLabelStyle}>Tab Name: </Text>
+            <Text style={styles.textInputLabelStyle}>Tab Name: </Text>
             <TextInput 
               value={newTabName}
               onChangeText={(val) => { setNewTabName(val) }}
-              style={textInputStyle}
+              style={styles.textInputStyle}
             />
           </View>
           { renderCreateTabButton() }
@@ -175,9 +140,9 @@ const MainTabs = (props) => {
       tabs.forEach((tab, idx) => {
         rendering.push(
           <View style={{ width: wp('90%'), height: hp('7.5%'), backgroundColor: '#919191', marginTop: hp('2.5%'), marginLeft: wp('5%') }}>
-            <Text style={[textStyle, { position: 'absolute', marginLeft: wp('2%'), maxWidth: wp('30%'), marginRight: wp('5%') }]}>{tab.name}</Text>
-            <Text style={[textStyle, { textAlign: 'center', marginRight: wp('5%') }]}>£ {tab.total.toFixed(2)}</Text>
-            <TouchableOpacity style={{ width: hp('4%'), height: hp('4%'), position: 'absolute', right: wp('4%'), marginTop: hp('1.75%') }} onPress={() => { exportTab() }}>
+            <Text style={[styles.textStyle, { position: 'absolute', marginLeft: wp('2%'), maxWidth: wp('30%'), marginRight: wp('5%') }]}>{tab.name}</Text>
+            <Text style={[styles.textStyle, { textAlign: 'center', marginRight: wp('5%') }]}>£ {tab.total.toFixed(2)}</Text>
+            <TouchableOpacity style={{ width: hp('4%'), height: hp('4%'), position: 'absolute', right: wp('4%'), marginTop: hp('1.75%') }} onPress={() => { importToTab(tab) }}>
               <Image source={require('../../../assets/addToTab.png')} style={{ width: hp('4%'), height: hp('4%') }}/>
             </TouchableOpacity>
           </View>
@@ -187,19 +152,50 @@ const MainTabs = (props) => {
       tabs.forEach((tab, idx) => {
         rendering.push(
           <View style={{ width: wp('90%'), height: hp('7.5%'), backgroundColor: '#919191', marginTop: hp('2.5%'), marginLeft: wp('5%') }}>
-            <Text style={[textStyle, { position: 'absolute', marginLeft: wp('2%'), maxWidth: wp('30%') }]}>{tab.name}</Text>
-            <Text style={[textStyle, { textAlign: 'center' }]}>£ {tab.total.toFixed(2)}</Text>
+          
+            <TouchableOpacity style={{ position: 'absolute', marginLeft: wp('2%'), maxWidth: wp('30%') }}>
+              <Text style={[styles.textStyle]}>{tab.name}</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity>
+              <Text style={[styles.textStyle, { textAlign: 'center' }]}>£ {tab.total.toFixed(2)}</Text>
+            </TouchableOpacity>
+            
             <TouchableOpacity style={{ width: hp('4%'), height: hp('4%'), position: 'absolute', right: wp('8%') + hp('4%'), marginTop: hp('1.75%') }} onPress={() => { exportTab(tab) }}>
               <Image source={require('../../../assets/exportTab_BLACK.png')} style={{ width: hp('4%'), height: hp('4%') }}/>
             </TouchableOpacity>
-            <TouchableOpacity style={{ width: hp('4%'), height: hp('4%'), position: 'absolute', right: wp('4%'), marginTop: hp('1.75%') }} onPress={() => {  }}>
-              <Image source={require('../../../assets/addToTab.png')} style={{ width: hp('4%'), height: hp('4%') }}/>
-            </TouchableOpacity>
+            
           </View>
         )
       });
     }
     return rendering;
+  }
+  
+  const updateTabButton = () => {
+    if (isCurrentTab != false && currentTabNumber != null) {
+      return (
+        <View style={{ width: wp('42.5%'), height: hp('7.5%'), backgroundColor: '#919191', marginTop: hp('2.5%'), marginLeft: wp('5%') }}>
+        <TouchableOpacity
+          style={{ width: wp('42.5%'), height: hp('7.5%'), padding: 0 }}
+          onPress={() => { updateTab() }}>
+          <Text style={[styles.textStyle, { textAlign: 'center' }]}>Update Tab</Text>
+        </TouchableOpacity>
+        </View>
+      )
+    } else {
+      return (
+        <View style={{ width: wp('42.5%'), height: hp('7.5%'), backgroundColor: '#919191', marginTop: hp('2.5%'), marginLeft: wp('5%') }}>
+          <Text style={[styles.textStyle, { textAlign: 'center' }]}></Text>
+        </View>
+      )
+    }
+  }
+  
+  const updateTab = () => {
+    setNewTabName(currentTabName)
+    setNewTabNumber(currentTabNumber)
+    createTab()
   }
 
 
@@ -212,13 +208,11 @@ const MainTabs = (props) => {
           <TouchableOpacity
             style={{ width: wp('42.5%'), height: hp('7.5%'), padding: 0 }}
             onPress={() => { setCreateTabRendering('block') }}>
-            <Text style={[textStyle, { textAlign: 'center' }]}>New Tab</Text>
+            <Text style={[styles.textStyle, { textAlign: 'center' }]}>New Tab</Text>
           </TouchableOpacity>
         </View>
         
-        <View style={{ width: wp('42.5%'), height: hp('7.5%'), backgroundColor: '#919191', marginTop: hp('2.5%'), marginLeft: wp('5%') }}>
-          <Text>{ test }</Text>
-        </View>
+        { updateTabButton() }
         
       </View>
       
@@ -239,6 +233,56 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
     shadowOffset: { height: 0 } 
   },
+  optionStyle: {
+    width: wp('80%'),
+    marginTop: hp('5%'),
+    backgroundColor: '#FFFFFF',
+    shadowColor: '#919191',
+    shadowRadius: 5,
+    shadowOpacity: 1,
+    shadowOffset: { height: 0 } 
+  },
+  textStyle: {
+    fontSize: hp('3%'),
+    color: '#DBDBDB',
+    marginTop: 0,
+    lineHeight: hp('5%'),
+    marginTop: hp('1.25%')
+  },
+  textInputStyle: { 
+    backgroundColor: '#E4E4E4',
+    width: wp('25%'),
+    height: hp('5%'),
+    shadowColor: '#919191',
+    shadowOffset: { height: 0, width: 0 },
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    fontSize: hp('3%'),
+    position: 'absolute',
+    right: 0
+  },
+  createTabWindowStyle: { 
+    width: wp('90%'),
+    height: hp('40%'),
+    backgroundColor: '#FFFFFF',
+    position: 'absolute',
+    top: hp('25%'),
+    left: wp('5%'),
+    padding: wp('5%') ,
+    shadowColor: '#919191',
+    shadowRadius: 5,
+    shadowOpacity: 1,
+    shadowOffset: { height: 0 } ,
+    zIndex: 9
+  },
+  textInputLabelStyle: { 
+    fontSize: hp('3%'),
+    lineHeight: hp('3%'),
+    marginTop: hp('1%'),
+    position: 'absolute',
+    textAlign: 'right', 
+    width: wp('30%') 
+  }
 });
 
 export default MainTabs;
