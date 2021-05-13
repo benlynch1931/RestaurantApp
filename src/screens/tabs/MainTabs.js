@@ -28,8 +28,7 @@ const MainTabs = (props) => {
     color: '#DBDBDB',
     marginTop: 0,
     lineHeight: hp('5%'),
-    marginTop: hp('1.25%'),
-    marginRight: wp('5%')
+    marginTop: hp('1.25%')
   }
   
   const exportTab = (selectedTab) => {
@@ -54,8 +53,8 @@ const MainTabs = (props) => {
       tabs.forEach((tab, idx) => {
         rendering.push(
           <View style={{ width: wp('90%'), height: hp('7.5%'), backgroundColor: '#919191', marginTop: hp('2.5%'), marginLeft: wp('5%') }}>
-            <Text style={[textStyle, { position: 'absolute', marginLeft: wp('2%'), maxWidth: wp('30%') }]}>{tab.name}</Text>
-            <Text style={[textStyle, { textAlign: 'center' }]}>£ {tab.total.toFixed(2)}</Text>
+            <Text style={[textStyle, { position: 'absolute', marginLeft: wp('2%'), maxWidth: wp('30%'), marginRight: wp('5%') }]}>{tab.name}</Text>
+            <Text style={[textStyle, { textAlign: 'center', marginRight: wp('5%') }]}>£ {tab.total.toFixed(2)}</Text>
             <TouchableOpacity style={{ width: hp('4%'), height: hp('4%'), position: 'absolute', right: wp('4%'), marginTop: hp('1.75%') }} onPress={() => { exportTab() }}>
               <Image source={require('../../../assets/addToTab.png')} style={{ width: hp('4%'), height: hp('4%') }}/>
             </TouchableOpacity>
@@ -89,7 +88,7 @@ const MainTabs = (props) => {
     
         <View style={{ width: wp('42.5%'), height: hp('7.5%'), backgroundColor: '#919191', marginTop: hp('2.5%'), marginLeft: wp('5%') }}>
           <TouchableOpacity
-            style={{ width: wp('42.5%'), height: hp('7.5%') }}
+            style={{ width: wp('42.5%'), height: hp('7.5%'), padding: 0 }}
             onPress={() => {
               addTab([
                 ...tabs,
