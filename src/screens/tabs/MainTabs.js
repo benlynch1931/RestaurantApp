@@ -15,20 +15,16 @@ const MainTabs = (props) => {
   const [ viewTabRendering, setViewTabRendering ] = useState('none')
   const [ newTabNumber, setNewTabNumber ] = useState('1')
   const [ newTabName, setNewTabName ] = useState(`Table ${newTabNumber}`)
-  const [ test, setTest ] = useState(null)
   
   
   
   const exportTab = (selectedTab) => {
     let tabIndexToExport = tabs.indexOf(selectedTab)
-    // setTest(tabIndexToExport)
-    // setTest(JSON.stringify(tabs))
     addToTotal(tabs[tabIndexToExport].total)
     addToBasket(tabs[tabIndexToExport].basket)
     setIsCurrentTab(true)
     setCurrentTabNumber(tabs[tabIndexToExport].number)
     setCurrentTabName(tabs[tabIndexToExport].name)
-    // let removedTab = []
     
     if (tabs.length > 1) {
       let tabToAlter = tabs
@@ -37,8 +33,6 @@ const MainTabs = (props) => {
     } else {
       addTab([])
     }
-    // setTest(JSON.stringify(removedTab))
-    
   }
   
   const importToTab = (selectedTab) => {
