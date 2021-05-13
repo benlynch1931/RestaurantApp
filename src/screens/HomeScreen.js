@@ -36,7 +36,7 @@ const HomeScreen = (props) => {
       </View>
       
       <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-        <TouchableOpacity style={{ width: wp("80%"), paddingTop: hp('7.5%'), paddingBottom: hp('7.5%') }}>
+        <TouchableOpacity style={{ width: wp("80%"), paddingTop: hp('7.5%'), paddingBottom: hp('7.5%') }} onPress={() => { setSection('tab'); setTitle('Tabs') }}>
           <Text style={{ alignSelf: 'center', fontSize: hp('5%') }}>Tabs</Text>
         </TouchableOpacity>
       </View>
