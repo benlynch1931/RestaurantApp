@@ -8,7 +8,8 @@ import { AppContext } from '../../../contexts/AppContext.js';
 
 const Wines = (props) => {
   
-  const { setTitle } = useContext(AppContext);
+  const { setTitle, addToTotal, total, addToBasket, basket } = useContext(AppContext)
+  const { setScreen } = useContext(DrinkContext);
   
   const optionStyle = {
     width: wp('80%'),
@@ -31,36 +32,88 @@ const Wines = (props) => {
     fontSize: hp('5%')
   }
   
-  return (
-    <ScrollView style={{ width: wp('100%'), backgroundColor: '#E9E9E9', height: hp('90%') }}>
-    
-      <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-        <TouchableOpacity style={touchableStyle} onPress={() => { setScreen('wines-champagne'); setTitle('Champagne') }}>
-          <Text style={textStyle}>Champagnes</Text>
-        </TouchableOpacity>
-      </View>
-    
-      <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-        <TouchableOpacity style={touchableStyle} onPress={() => { setScreen('wines-red'); setTitle('Red') }}>
-          <Text style={textStyle}>Red</Text>
-        </TouchableOpacity>
-      </View>
-      
-      <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-        <TouchableOpacity style={touchableStyle} onPress={() => { setScreen('wines-rose'); setTitle('Rose') }}>
-          <Text style={textStyle}>Rose</Text>
-        </TouchableOpacity>
-      </View>
-      
-      <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-        <TouchableOpacity style={touchableStyle} onPress={() => { setScreen('wines-white'); setTitle('White') }}>
-          <Text style={textStyle}>White</Text>
-        </TouchableOpacity>
-      </View>
-      
-      
-    </ScrollView>
-  )
+  const drinks = [
+    {
+      label: 'Small Wine',
+      price: 3.60
+    },
+    {
+      label: 'Medium Wine',
+      price: 4.40
+    },
+    {
+      label: 'Large Wine',
+      price: 5.70
+    },
+    {
+      label: 'Btl of Wine',
+      price: 15.50
+    },
+    {
+      label: 'Takeaway Btl Wine',
+      price: 7.50
+    },
+    {
+      label: 'Btl of Champagne',
+      price: 20.00
+    }
+  ]
+  
+  const pressAddToBasket = (wine) => {
+    addToTotal(wine.price + total)
+    addToBasket([...basket, [wine.label, wine.price]])
+  }
+  
+  const renderDrinks = () => {
+    let renderedDrinks = []
+    drinks.forEach((wine, idx) => {
+      renderedDrinks.push(
+        <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
+          <TouchableOpacity style={touchableStyle} onPress={() => { pressAddToBasket(wine) }}>
+            <Text style={textStyle}>{wine.label}</Text>
+          </TouchableOpacity>
+        </View>
+      )
+    });
+    return renderedDrinks
+  }
+
+    return (
+      <ScrollView style={{ width: wp('100%'), backgroundColor: '#E9E9E9', height: hp('82.5%') }}>
+        { renderDrinks() }
+      </ScrollView>
+    )
+  
+  // return (
+  //   <ScrollView style={{ width: wp('100%'), backgroundColor: '#E9E9E9', height: hp('82.5%') }}>
+  // 
+  //     <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
+  //       <TouchableOpacity style={touchableStyle} onPress={() => { setScreen('wines-champagne'); setTitle('Champagne') }}>
+  //         <Text style={textStyle}>Champagnes</Text>
+  //       </TouchableOpacity>
+  //     </View>
+  // 
+  //     <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
+  //       <TouchableOpacity style={touchableStyle} onPress={() => { setScreen('wines-red'); setTitle('Red') }}>
+  //         <Text style={textStyle}>Red</Text>
+  //       </TouchableOpacity>
+  //     </View>
+  // 
+  //     <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
+  //       <TouchableOpacity style={touchableStyle} onPress={() => { setScreen('wines-rose'); setTitle('Rose') }}>
+  //         <Text style={textStyle}>Rose</Text>
+  //       </TouchableOpacity>
+  //     </View>
+  // 
+  //     <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
+  //       <TouchableOpacity style={touchableStyle} onPress={() => { setScreen('wines-white'); setTitle('White') }}>
+  //         <Text style={textStyle}>White</Text>
+  //       </TouchableOpacity>
+  //     </View>
+  // 
+  // 
+  //   </ScrollView>
+  // )
 }
 
 export default Wines;
