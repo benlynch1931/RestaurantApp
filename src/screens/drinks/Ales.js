@@ -11,8 +11,8 @@ const Ales = (props) => {
   
   const { addToTotal, total, addToBasket, basket } = useContext(AppContext)
   
-  const optionStyle = {
-    width: wp('80%'),
+  const firstOptionStyle = {
+    width: wp('45%'),
     marginTop: hp('2.5%'),
     backgroundColor: '#FFFFFF',
     shadowColor: '#919191',
@@ -21,15 +21,49 @@ const Ales = (props) => {
     shadowOffset: { height: 0 } 
   }
   
-  const touchableStyle = {
-    width: wp("80%"),
+  const secondOptionStyle = {
+    width: wp('20%'),
+    marginTop: hp('2.5%'),
+    backgroundColor: '#FFFFFF',
+    shadowColor: '#919191',
+    shadowRadius: 5,
+    shadowOpacity: 1,
+    shadowOffset: { height: 0 } ,
+    marginLeft: wp('5%')
+  }
+  
+  const infoOptionStyle = {
+    width: wp('15%'),
+    marginTop: hp('2.5%'),
+    backgroundColor: '#FFFFFF',
+    shadowColor: '#919191',
+    shadowRadius: 5,
+    shadowOpacity: 1,
+    shadowOffset: { height: 0 } ,
+    marginLeft: wp('5%')
+  }
+  
+  const firstTouchableStyle = {
+    width: wp("45%"),
+    paddingTop: hp('0.5%'),
+    paddingBottom: hp('0.5%')
+  }
+  
+  const secondTouchableStyle = {
+    width: wp("20%"),
+    paddingTop: hp('0.5%'),
+    paddingBottom: hp('0.5%')
+  }
+  
+  const infoTouchableStyle = {
+    width: wp("15%"),
     paddingTop: hp('0.5%'),
     paddingBottom: hp('0.5%')
   }
   
   const textStyle = {
     textAlign: 'center',
-    fontSize: hp('5%')
+    fontSize: hp('4.5%')
   }
   
   
@@ -37,67 +71,93 @@ const Ales = (props) => {
   const drinks = [
     {
       label: 'Batch',
-      price: 3.40,
+      firstPrice: 3.40,
+      secondPrice: 1.70,
       alcoholPercentage: 3.5,
       description: ''
     },
     {
       label: 'Bath Gem',
-      price: 3.85,
+      firstPrice: 3.85,
+      secondPrice: 1.95,
       alcoholPercentage: 4.1,
       description: ''
     },
     {
       label: 'Butcombe',
-      price: 3.85,
+      firstPrice: 3.85,
+      secondPrice: 1.95,
       alcoholPercentage: 4,
       description: ''
     },
     {
       label: 'Guest Ale',
-      price: 3.95,
+      firstPrice: 3.95,
+      secondPrice: 2.00,
       alcoholPercentage: 0,
       description: ''
     },
     {
       label: 'Guinness',
-      price: 4.55,
+      firstPrice: 4.55,
+      secondPrice: 2.30,
       alcoholPercentage: 4.1,
       description: ''
     },
     {
       label: 'Otter',
-      price: 3.40,
+      firstPrice: 3.40,
+      secondPrice: 1.70,
       alcoholPercentage: 3.6,
       description: ''
     },
     {
-      label: 'Palmers IPA',
-      price: 3.75,
+      label: 'Palmers',
+      firstPrice: 3.75,
+      secondPrice: 1.90,
       alcoholPercentage: 4.2,
       description: ''
     },
     {
       label: 'Tribute',
-      price: 3.75,
+      firstPrice: 3.75,
+      secondPrice: 1.90,
       alcoholPercentage: 4.2,
       description: ''
     }
   ]
   
-  const pressAddToBasket = (ale) => {
-    addToTotal(ale.price + total)
-    addToBasket([...basket, [ale.label, ale.price]])
+  const pressAddToBasket = (ale, priceType) => {
+    if (priceType == 'first') {
+      addToTotal(ale.firstPrice + total)
+      addToBasket([...basket, [ale.label, ale.firstPrice]])
+    } else if (priceType == 'second') {
+      addToTotal(ale.secondPrice + total)
+      addToBasket([...basket, [`Half ${ale.label}`, ale.secondPrice]])
+    }
+    
   }
   
   const renderDrinks = () => {
     let renderedDrinks = []
     drinks.forEach((ale, idx) => {
       renderedDrinks.push(
-        <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-          <TouchableOpacity style={touchableStyle} onPress={() => { pressAddToBasket(ale) }}>
-            <Text style={textStyle}>{ale.label}</Text>
-          </TouchableOpacity>
+        <View style={{ display: 'flex', flexDirection: 'row' }}>
+          <View style={{ ...firstOptionStyle, marginLeft: wp('5%') }}>
+            <TouchableOpacity style={firstTouchableStyle} onPress={() => { pressAddToBasket(ale, 'first') }}>
+              <Text style={textStyle}>{ale.label}</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={{ ...secondOptionStyle }}>
+            <TouchableOpacity style={secondTouchableStyle} onPress={() => { pressAddToBasket(ale, 'second') }}>
+              <Text style={textStyle}>HALF</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={{ ...infoOptionStyle }}>
+            <TouchableOpacity style={infoTouchableStyle} onPress={() => {  }}>
+              <Text style={textStyle}>I</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       )
     });
