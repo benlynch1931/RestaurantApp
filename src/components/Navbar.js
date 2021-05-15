@@ -27,18 +27,18 @@ const Navbar = (props) => {
     basket.forEach((item, idx) => {
       render.push(
         <View style={{ position: 'relative', height: hp('5%') }}>
-          <View style={{ position: 'absolute', left: wp('5%') }}>
-            <TouchableOpacity onPress={() => { removeItem(item[0], item[1]) }}>
-              <Text style={{ fontSize: hp('3%') }}>X</Text>
+          <View style={{ position: 'absolute', left: wp('2.5%') }}>
+            <TouchableOpacity onPress={() => { removeItem(item[0], item[1]) }} style={{ width: wp('10%'), height: hp('5%') }}>
+              <Image source={require('../../assets/delete.png')} style={{ height: hp('2.5%'), width: hp('2.2%'), marginTop: hp('1.05%'), marginLeft: ((wp('10%') - hp('2.2%')) / 2) - wp('2%') }} />
             </TouchableOpacity>
           </View>
           
           <View style={{ position: 'absolute', left: wp('12.5%') }}>
-            <Text style={{ fontSize: hp('3%') }}>{item[0]}</Text>
+            <Text style={{ fontSize: hp('3%'), lineHeight: hp('3%'), marginTop: hp('1%') }}>{item[0]}</Text>
           </View>
           
           <View style={{ position: 'absolute', right: wp('5%') }}>
-            <Text style={{ fontSize: hp('3%') }}>£ {item[1].toFixed(2)}</Text>
+            <Text style={{ fontSize: hp('3%'), lineHeight: hp('3%'), marginTop: hp('1%') }}>£ {item[1].toFixed(2)}</Text>
           </View>
         </View>
       )
