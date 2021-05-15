@@ -8,7 +8,13 @@ class TabContextProvider extends Component {
     tabs: [],
     isCurrentTab: false,
     currentTabNumber: null,
-    currentTabName: null
+    currentTabName: null,
+    viewTabInfo: {
+      name: '',
+      number: '',
+      basket: [],
+      total: 0
+    }
   }
   
   addTab = (newTabs) => {
@@ -26,6 +32,10 @@ class TabContextProvider extends Component {
   setCurrentTabName = (tabName) => {
     this.setState({ currentTabName: tabName })
   }
+  
+  setViewTabInfo = (tab) => {
+    this.setState({ viewTabInfo: tab })
+  }
 
 
   
@@ -37,7 +47,8 @@ class TabContextProvider extends Component {
         addTab: this.addTab,
         setIsCurrentTab: this.setIsCurrentTab,
         setCurrentTabNumber: this.setCurrentTabNumber,
-        setCurrentTabName: this.setCurrentTabName
+        setCurrentTabName: this.setCurrentTabName,
+        setViewTabInfo: this.setViewTabInfo
       }}>
       {this.props.children}
       </TabContext.Provider>
