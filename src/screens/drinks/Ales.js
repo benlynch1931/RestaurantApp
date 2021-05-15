@@ -4,6 +4,7 @@ import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-ta
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 import { AppContext } from '../../contexts/AppContext';
+import styles from '../../styles/drinks.js'
 
 const Ales = (props) => {
   
@@ -14,79 +15,6 @@ const Ales = (props) => {
   const [ selectedDrink, setSelectDrink ] = useState({ firstPrice: 0})
   const [ viewDrinkInfoRendering, setViewDrinkInfoRendering ] = useState('none')
   
-  const firstOptionStyle = {
-    width: wp('45%'),
-    minHeight: hp('6%'),
-    marginTop: hp('2.5%'),
-    backgroundColor: '#FFFFFF',
-    shadowColor: '#919191',
-    shadowRadius: 5,
-    shadowOpacity: 1,
-    shadowOffset: { height: 0 } 
-  }
-  
-  const secondOptionStyle = {
-    width: wp('20%'),
-    minHeight: hp('6%'),
-    marginTop: hp('2.5%'),
-    backgroundColor: '#FFFFFF',
-    shadowColor: '#919191',
-    shadowRadius: 5,
-    shadowOpacity: 1,
-    shadowOffset: { height: 0 } ,
-    marginLeft: wp('5%')
-  }
-  
-  const infoOptionStyle = {
-    width: hp('6%'),
-    minHeight: hp('6%'),
-    marginTop: hp('2.5%'),
-    backgroundColor: '#FFFFFF',
-    shadowColor: '#919191',
-    shadowRadius: 5,
-    shadowOpacity: 1,
-    shadowOffset: { height: 0 } ,
-    marginLeft: wp('5%')
-  }
-  
-  const firstTouchableStyle = {
-    width: wp("45%"),
-    paddingTop: hp('0.5%'),
-    paddingBottom: hp('0.5%')
-  }
-  
-  const secondTouchableStyle = {
-    width: wp("20%"),
-    paddingTop: hp('0.5%'),
-    paddingBottom: hp('0.5%')
-  }
-  
-  const infoTouchableStyle = {
-    width: hp('5%')
-  }
-  
-  const textStyle = {
-    textAlign: 'center',
-    fontSize: hp('4.5%')
-  }
-  
-  const viewTabWindowStyle = { 
-    width: wp('90%'),
-    height: hp('70%'),
-    backgroundColor: '#FFFFFF',
-    position: 'absolute',
-    top: hp('10%'),
-    left: wp('5%'),
-    padding: wp('5%') ,
-    shadowColor: '#919191',
-    shadowRadius: 5,
-    shadowOpacity: 1,
-    shadowOffset: { height: 0 } ,
-    zIndex: 9
-  }
-  
-  
-  
   const drinks = [
     {
       firstLabel: 'Batch',
@@ -95,7 +23,9 @@ const Ales = (props) => {
       secondPrice: 1.70,
       alcoholPercentage: 3.5,
       brewery: 'St. Austell',
-      description: ''
+      description: '',
+      background: '#3131E0',
+      text: '#FFFFFF'
     },
     {
       firstLabel: 'Bath Gem',
@@ -104,7 +34,9 @@ const Ales = (props) => {
       secondPrice: 1.95,
       alcoholPercentage: 4.1,
       brewery: 'Bath Ales',
-      description: 'Full Bodied & Malty'
+      description: 'Full Bodied & Malty',
+      background: '#3131E0',
+      text: '#FFFFFF'
     },
     {
       firstLabel: 'Butcombe',
@@ -113,7 +45,9 @@ const Ales = (props) => {
       secondPrice: 1.95,
       alcoholPercentage: 4,
       brewery: 'Butcombe',
-      description: ''
+      description: '',
+      background: '#3131E0',
+      text: '#FFFFFF'
     },
     {
       firstLabel: 'Guest Ale',
@@ -122,7 +56,9 @@ const Ales = (props) => {
       secondPrice: 2.00,
       alcoholPercentage: 0,
       brewery: 'Varies',
-      description: ''
+      description: '',
+      background: '#3131E0',
+      text: '#FFFFFF'
     },
     {
       firstLabel: 'Guinness',
@@ -131,7 +67,9 @@ const Ales = (props) => {
       secondPrice: 2.30,
       alcoholPercentage: 4.1,
       brewery: 'Guinness',
-      description: ''
+      description: '',
+      background: '#3131E0',
+      text: '#FFFFFF'
     },
     {
       firstLabel: 'Otter',
@@ -140,7 +78,9 @@ const Ales = (props) => {
       secondPrice: 1.70,
       alcoholPercentage: 3.6,
       brewery: 'Otter Brewery',
-      description: ''
+      description: '',
+      background: '#3131E0',
+      text: '#FFFFFF'
     },
     {
       firstLabel: 'Palmers',
@@ -149,7 +89,9 @@ const Ales = (props) => {
       secondPrice: 1.90,
       alcoholPercentage: 4.2,
       brewery: 'Palmers',
-      description: ''
+      description: '',
+      background: '#3131E0',
+      text: '#FFFFFF'
     },
     {
       firstLabel: 'Tribute',
@@ -158,7 +100,9 @@ const Ales = (props) => {
       secondPrice: 1.90,
       alcoholPercentage: 4.2,
       brewery: 'St. Austell',
-      description: ''
+      description: '',
+      background: '#3131E0',
+      text: '#FFFFFF'
     }
   ]
   
@@ -175,15 +119,14 @@ const Ales = (props) => {
   
   const renderViewDrinkInfo = () => {
     return (
-      <View style={{ display: viewDrinkInfoRendering, width: wp('100%'), height: hp('82.5%'), backgroundColor: 'rgba(0, 0, 0, 0.5)', position: 'absolute', zIndex: 9 }}>
+      <View style={{ ...styles.viewTabBackgroundStyle, display: viewDrinkInfoRendering }}>
         <View style={{ position: 'absolute', right: wp('5%'), top: wp('4%') }}>
           <TouchableOpacity onPress={() => { setViewDrinkInfoRendering('none'); setSelectDrink({ firstPrice: 0}) }}>
             <Text style={{ fontSize: hp('5%'), color: '#FFFFFF' }}>X</Text>
           </TouchableOpacity>
         </View>
       
-        <View style={viewTabWindowStyle}>
-          <Text style={{ position: 'absolute', fontSize: hp('3%'), left: wp('2.5%'), top: wp('2.5%'), lineHeight: hp('3%') }}>{ }</Text>
+        <View style={styles.viewTabWindowStyle}>
           <Text style={{ fontSize: hp('6%'), lineHeight: hp('6%'), marginTop: hp('2%') }}>{ selectedDrink.firstLabel }</Text>
           <Text style={{ fontSize: hp('3%'), lineHeight: hp('6%') }}>{ selectedDrink.brewery }</Text>
           <Text style={{ fontSize: hp('3%'), lineHeight: hp('6%'), marginTop: hp('2%') }}>ABV: { selectedDrink.alcoholPercentage }% | £{ selectedDrink.firstPrice.toFixed(2) }</Text>
@@ -203,22 +146,26 @@ const Ales = (props) => {
     let renderedDrinks = []
     drinks.forEach((ale, idx) => {
       renderedDrinks.push(
-        <View style={{ display: 'flex', flexDirection: 'row' }}>
-          <View style={{ ...firstOptionStyle, marginLeft: wp('5%') }}>
-            <TouchableOpacity style={firstTouchableStyle} onPress={() => { pressAddToBasket(ale, 'first') }}>
-              <Text style={textStyle}>{ale.firstLabel}</Text>
+        <View key={`main ${idx}`} style={{ display: 'flex', flexDirection: 'row' }}>
+        
+          <View key={`firstMod ${idx}`}style={[styles.firstOptionStyle, { marginLeft: wp('5%') }]}>
+            <TouchableOpacity key={`firstModButton ${idx}`} style={{ ...styles.firstTouchableStyle, backgroundColor: ale.background }} onPress={() => { pressAddToBasket(ale, 'first') }}>
+              <Text key={`firstModLabel ${idx}`} style={{ ...styles.drinkTextStyle, color: ale.text }}>{ale.firstLabel}</Text>
             </TouchableOpacity>
           </View>
-          <View style={{ ...secondOptionStyle }}>
-            <TouchableOpacity style={secondTouchableStyle} onPress={() => { pressAddToBasket(ale, 'second') }}>
-              <Text style={textStyle}>{ ale.secondModifier }</Text>
+          
+          <View key={`secondMod ${idx}`} style={styles.secondOptionStyle }>
+            <TouchableOpacity key={`secondModButton ${idx}`} style={{ ...styles.secondTouchableStyle, backgroundColor: ale.background }} onPress={() => { pressAddToBasket(ale, 'second') }}>
+              <Text key={`secondModLabel ${idx}`} style={{ ...styles.drinkTextStyle, color: ale.text }}>{ ale.secondModifier }</Text>
             </TouchableOpacity>
           </View>
-          <View style={{ ...infoOptionStyle }}>
-            <TouchableOpacity style={infoTouchableStyle} onPress={() => { setSelectDrink(ale); setViewDrinkInfoRendering('block') }}>
-              <Image source={require('../../../assets/info.png')} style={{ height: hp('5%'), width: hp('5%'), marginTop: hp('0.5%'), marginLeft: hp('0.5%')}} />
+          
+          <View key={`info ${idx}`} style={{ ...styles.infoOptionStyle, backgroundColor: ale.background }}>
+            <TouchableOpacity key={`infoButton ${idx}`} style={styles.infoTouchableStyle} onPress={() => { setSelectDrink(ale); setViewDrinkInfoRendering('block') }}>
+              <Image key={`infoIcon ${idx}`} source={require('../../../assets/info_WHITE.png')} style={{ height: hp('5%'), width: hp('5%'), marginTop: hp('0.5%'), marginLeft: hp('0.5%')}} />
             </TouchableOpacity>
           </View>
+          
         </View>
       )
     });
