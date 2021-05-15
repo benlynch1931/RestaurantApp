@@ -15,7 +15,7 @@ const MainTabs = (props) => {
   const [ viewTabRendering, setViewTabRendering ] = useState('none')
   const [ newTabNumber, setNewTabNumber ] = useState('1')
   const [ newTabName, setNewTabName ] = useState(`Table ${newTabNumber}`)
-  
+  const [ deleteTabView, setDeleteTabView ] = useState(false)
   
   
   const exportTab = (selectedTab) => {
@@ -44,8 +44,7 @@ const MainTabs = (props) => {
       number: tabToUpdate.number,
       basket: [...tabToUpdate.basket, ...basket],
       total: tabToUpdate.total + total
-    }
-    
+    };
     addTab([
       ...tabs,
       tabToUpdate
@@ -194,37 +193,51 @@ const MainTabs = (props) => {
     }
   }
   
-  const renderTabs = () => {
+  const renderTabs = (whatRendering) => {
     let rendering = []
-    if (total != 0 && basket.length != 0) {
+    if (whatRendering == 'view') {
+      if (total != 0 && basket.length != 0) {
+        tabs.forEach((tab, idx) => {
+          rendering.push(
+            <View style={{ width: wp('90%'), height: hp('7.5%'), backgroundColor: '#919191', marginTop: hp('2.5%'), marginLeft: wp('5%') }}>
+              <Text style={[styles.textStyle, { position: 'absolute', marginLeft: wp('2%'), maxWidth: wp('30%'), marginRight: wp('5%') }]}>{tab.name}</Text>
+              <Text style={[styles.textStyle, { textAlign: 'center', marginRight: wp('5%') }]}>£ {tab.total.toFixed(2)}</Text>
+              <TouchableOpacity style={{ width: hp('4%'), height: hp('4%'), position: 'absolute', right: wp('4%'), marginTop: hp('1.75%') }} onPress={() => { importToTab(tab) }}>
+                <Image source={require('../../../assets/addToTab.png')} style={{ width: hp('4%'), height: hp('4%') }}/>
+              </TouchableOpacity>
+            </View>
+          )
+        });
+      } else {
+        tabs.forEach((tab, idx) => {
+          rendering.push(
+            <View style={{ width: wp('90%'), height: hp('7.5%'), backgroundColor: '#919191', marginTop: hp('2.5%'), marginLeft: wp('5%') }}>
+            
+              <TouchableOpacity style={{ position: 'absolute', marginLeft: wp('2%'), maxWidth: wp('30%') }} onPress={() => { viewTab(tab) }}>
+                <Text style={[styles.textStyle]}>{tab.name}</Text>
+              </TouchableOpacity>
+              
+              <TouchableOpacity onPress={() => { viewTab(tab) }}>
+                <Text style={[styles.textStyle, { textAlign: 'center' }]}>£ {tab.total.toFixed(2)}</Text>
+              </TouchableOpacity>
+              
+              <TouchableOpacity style={{ width: hp('4%'), height: hp('4%'), position: 'absolute', right: wp('8%') + hp('4%'), marginTop: hp('1.75%') }} onPress={() => { exportTab(tab) }}>
+                <Image source={require('../../../assets/exportTab_BLACK.png')} style={{ width: hp('4%'), height: hp('4%') }}/>
+              </TouchableOpacity>
+              
+            </View>
+          )
+        });
+      }
+    } else {
       tabs.forEach((tab, idx) => {
         rendering.push(
           <View style={{ width: wp('90%'), height: hp('7.5%'), backgroundColor: '#919191', marginTop: hp('2.5%'), marginLeft: wp('5%') }}>
             <Text style={[styles.textStyle, { position: 'absolute', marginLeft: wp('2%'), maxWidth: wp('30%'), marginRight: wp('5%') }]}>{tab.name}</Text>
             <Text style={[styles.textStyle, { textAlign: 'center', marginRight: wp('5%') }]}>£ {tab.total.toFixed(2)}</Text>
-            <TouchableOpacity style={{ width: hp('4%'), height: hp('4%'), position: 'absolute', right: wp('4%'), marginTop: hp('1.75%') }} onPress={() => { importToTab(tab) }}>
-              <Image source={require('../../../assets/addToTab.png')} style={{ width: hp('4%'), height: hp('4%') }}/>
+            <TouchableOpacity style={{ width: hp('4%'), height: hp('4%'), position: 'absolute', right: wp('4%'), marginTop: hp('1.75%') }} onPress={() => { deleteTabEvent(tab) }}>
+              <Text style={{ fontSize: hp('3%'), textAlign:  'right', color: '#FFFFFF' }}>X</Text>
             </TouchableOpacity>
-          </View>
-        )
-      });
-    } else {
-      tabs.forEach((tab, idx) => {
-        rendering.push(
-          <View style={{ width: wp('90%'), height: hp('7.5%'), backgroundColor: '#919191', marginTop: hp('2.5%'), marginLeft: wp('5%') }}>
-          
-            <TouchableOpacity style={{ position: 'absolute', marginLeft: wp('2%'), maxWidth: wp('30%') }} onPress={() => { viewTab(tab) }}>
-              <Text style={[styles.textStyle]}>{tab.name}</Text>
-            </TouchableOpacity>
-            
-            <TouchableOpacity onPress={() => { viewTab(tab) }}>
-              <Text style={[styles.textStyle, { textAlign: 'center' }]}>£ {tab.total.toFixed(2)}</Text>
-            </TouchableOpacity>
-            
-            <TouchableOpacity style={{ width: hp('4%'), height: hp('4%'), position: 'absolute', right: wp('8%') + hp('4%'), marginTop: hp('1.75%') }} onPress={() => { exportTab(tab) }}>
-              <Image source={require('../../../assets/exportTab_BLACK.png')} style={{ width: hp('4%'), height: hp('4%') }}/>
-            </TouchableOpacity>
-            
           </View>
         )
       });
@@ -255,34 +268,86 @@ const MainTabs = (props) => {
   const updateTab = () => {
     createTab()
   }
+  
+  const deleteTabEvent = (tabToDelete) => {
+    let tabIndexToExport = tabs.indexOf(tabToDelete)
+    if (tabs.length > 1) {
+      let tabToAlter = tabs
+      tabToAlter.splice(tabIndexToExport, 1)
+      addTab(tabToAlter)
+    } else {
+      addTab([])
+    }
+  }
+  
+  const renderDeleteTab = () => {
+    return (
+      <View style={{ width: wp('42.5%'), height: hp('7.5%'), backgroundColor: '#919191', marginLeft: wp('5%') }}>
+        <TouchableOpacity
+          style={{ width: wp('42.5%'), height: hp('7.5%'), padding: 0 }}
+          onPress={() => { setDeleteTabView(true) }}>
+          <Text style={[styles.textStyle, { textAlign: 'center' }]}>Delete Tabs</Text>
+        </TouchableOpacity>
+      </View>
+    )
+  }
 
 
-  return (
-    <View style={{ width: wp('100%'), backgroundColor: '#E9E9E9', height: hp('82.5%') }}>
+  if (deleteTabView == false) {
+    return (
+      <View style={{ width: wp('100%'), backgroundColor: '#E9E9E9', height: hp('82.5%') }}>
+        
+        <View style={{ display: 'flex', flexDirection: 'row', marginBottom: wp('5%') }}>
       
-      <View style={{ display: 'flex', flexDirection: 'row', marginBottom: hp('5%') }}>
-    
-        <View style={{ width: wp('42.5%'), height: hp('7.5%'), backgroundColor: '#919191', marginTop: hp('2.5%'), marginLeft: wp('5%') }}>
-          <TouchableOpacity
-            style={{ width: wp('42.5%'), height: hp('7.5%'), padding: 0 }}
-            onPress={() => { setCreateTabRendering('block') }}>
-            <Text style={[styles.textStyle, { textAlign: 'center' }]}>New Tab</Text>
-          </TouchableOpacity>
+          <View style={{ width: wp('42.5%'), height: hp('7.5%'), backgroundColor: '#919191', marginTop: hp('2.5%'), marginLeft: wp('5%') }}>
+            <TouchableOpacity
+              style={{ width: wp('42.5%'), height: hp('7.5%'), padding: 0 }}
+              onPress={() => { setCreateTabRendering('block') }}>
+              <Text style={[styles.textStyle, { textAlign: 'center' }]}>New Tab</Text>
+            </TouchableOpacity>
+          </View>
+          
+          { updateTabButton() }
+          
         </View>
         
-        { updateTabButton() }
+        <View style={{ marginBottom: hp('5%') }}>
+        
+          { renderDeleteTab() }
+          
+        </View>
+        
+        { renderTabs('view') }
+        { renderCreateTab() }
+        { renderViewTabInfo() }
+        
         
       </View>
+    )
+  } else {
+    return (
+      <View style={{ width: wp('100%'), backgroundColor: '#E9E9E9', height: hp('82.5%') }}>
+        
+        <View style={{ display: 'flex', flexDirection: 'row', marginBottom: hp('5%') }}>
       
-      { renderCreateTab() }
-      { renderViewTabInfo() }
-      { renderTabs() }
-      
-      <Text>{ test }</Text>
-      
-      
-    </View>
-  )
+          { updateTabButton() }
+          
+          <View style={{ width: wp('42.5%'), height: hp('7.5%'), backgroundColor: '#919191', marginTop: hp('2.5%'), marginLeft: wp('5%') }}>
+            <TouchableOpacity
+              style={{ width: wp('42.5%'), height: hp('7.5%'), padding: 0 }}
+              onPress={() => { setDeleteTabView(false) }}>
+              <Text style={[styles.textStyle, { textAlign: 'center' }]}>Close</Text>
+            </TouchableOpacity>
+          </View>
+          
+        </View>
+
+        { renderTabs('delete') }
+        
+      </View>
+    )
+  }
+  
 }
 
 const styles = StyleSheet.create({
