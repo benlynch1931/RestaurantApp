@@ -5,11 +5,15 @@ export const AppContext = createContext();
 
 class AppContextProvider extends Component {
   state = {
-    section: 'home',
+    section: 'view-groups',
     previousSection: null,
     title: 'Home',
     total: 0,
-    basket: []
+    basket: [],
+    departments: [],
+    selectedDepartment: null,
+    groups: [],
+    selectedGroup: null
   }
 
   setSection = (newSection, previousSection) => {
@@ -37,6 +41,22 @@ class AppContextProvider extends Component {
     this.setState({ basket: basket })
   }
   
+  setDepartments = (departments) => {
+    this.setState({ departments: departments })
+  }
+  
+  setGroups = (groups) => {
+    this.setState({ groups: groups })
+  }
+  
+  setSelectedGroup = (groupID) => {
+    this.setState({ selectedGroup: groupID })
+  }
+  
+  setSelectedDepartment = (departmentID) => {
+    thi.setState({ selectedDepartment: departmentID })
+  }
+  
 
   render() {
     return (
@@ -47,7 +67,12 @@ class AppContextProvider extends Component {
         addToTotal: this.addToTotal,
         removeFromTotal: this.removeFromTotal,
         addToBasket: this.addToBasket,
-        removeFromBasket: this.removeFromBasket
+        removeFromBasket: this.removeFromBasket,
+        
+        setDepartments: this.setDepartments,
+        setGroups: this.setGroups,
+        setSelectedGroup: this.setSelectedGroup,
+        setSelectedDepartment: this.setSelectedDepartment
       }}>
       {this.props.children}
       </AppContext.Provider>
