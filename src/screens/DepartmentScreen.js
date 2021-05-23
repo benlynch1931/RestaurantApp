@@ -9,7 +9,7 @@ import { AppContext } from '../contexts/AppContext.js'
 
 const DepartmentScreen = (props) => {
   
-  const { departments, setDepartments } = useContext(AppContext);
+  const { departments, setDepartments, setSection, setSelectedDepartment, setTitle } = useContext(AppContext);
   
   const fetchDepartments = () => {
     fetch('http://192.168.1.213:6030/api/departments', {
@@ -20,6 +20,7 @@ const DepartmentScreen = (props) => {
     })
     .then(res => res.json())
     .then(data => {
+      console.log(data.departments)
       setDepartments(data.departments)
     })
   }
@@ -43,13 +44,13 @@ const DepartmentScreen = (props) => {
         rendering.push(
           <View style={styles.rowStyle}>
             <View style={{ ...styles.optionStyle, marginRight: wp('10%') }}>
-              <TouchableOpacity style={styles.touchableStyle} onPress={() => {  }}>
+              <TouchableOpacity style={styles.touchableStyle} onPress={() => { setSelectedDepartment(specificDepartments[idx].index); setSection('view-plus'); setTitle(specificDepartments[idx].name) }}>
                 <Text style={styles.textStyle}>{ specificDepartments[idx].name }</Text>
               </TouchableOpacity>
             </View>
             
             <View style={styles.optionStyle}>
-              <TouchableOpacity style={styles.touchableStyle} onPress={() => {  }}>
+              <TouchableOpacity style={styles.touchableStyle} onPress={() => { setSelectedDepartment(specificDepartments[idx+1].index); setSection('view-plus'); setTitle(specificDepartments[idx+1].name) }}>
                 <Text style={{ ...styles.textStyle }}>{ specificDepartments[idx+1].name }</Text>
               </TouchableOpacity>
             </View>
@@ -58,7 +59,7 @@ const DepartmentScreen = (props) => {
       } else {
         rendering.push(
           <View style={styles.rowStyle}>
-            <TouchableOpacity style={styles.touchableStyle} onPress={() => {  }}>
+            <TouchableOpacity style={styles.touchableStyle} onPress={() => { setSelectedDepartment(specificDepartments[idx].index); setSection('view-plus'); setTitle(specificDepartments[idx].name) }}>
               <Text style={{ ...styles.textStyle }}>{ specificDepartments[idx].name }</Text>
             </TouchableOpacity>
           </View>
