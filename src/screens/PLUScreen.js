@@ -9,6 +9,11 @@ import { AppContext } from '../contexts/AppContext.js'
 
 const PLUScreen = (props) => {
   
+  const hexConversion = {
+    '0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9,
+    'A': 10, 'B': 11, 'C': 12, 'D': 13, 'E': 14, 'F': 15
+  }
+  
   const { 
     pluList, setPluList,
     addToTotal, total,
@@ -70,7 +75,7 @@ const PLUScreen = (props) => {
           
           <View key={`info ${idx}`} style={{ ...styles.infoOptionStyle, backgroundColor: plu.background }}>
             <TouchableOpacity key={`infoButton ${idx}`} style={styles.infoTouchableStyle} onPress={() => {  }}>
-              <Image key={`infoIcon ${idx}`} source={require('../../assets/info.png')} style={{ height: hp('5%'), width: hp('5%'), marginTop: hp('0.5%'), marginLeft: hp('0.5%')}} />
+              <Image key={`infoIcon ${idx}`} source={renderInfoPicture(plu.background)} style={{ height: hp('5%'), width: hp('5%'), marginTop: hp('0.5%'), marginLeft: hp('0.5%')}} />
             </TouchableOpacity>
           </View>
           
@@ -80,6 +85,42 @@ const PLUScreen = (props) => {
     
     return rendering;
     
+  }
+  
+  const renderInfoPicture = (hexValue) => {
+    
+    // split into array 
+    let hexValueArray = hexValue.split('')
+    
+    // remove hash 
+    hexValueArray.shift()
+    
+    // group into 3x 2D arrays of 2 elements
+    let rgbHexArray = []
+    for (let i = 0; i<hexValueArray.length; i+=2) {
+      rgbHexArray.push([hexValueArray[i], hexValueArray[i+1]])
+    }
+    // map first element to x16
+    rgbHexArray.forEach((item) => {
+      item[0] = hexConversion[item[0]] * 16
+      item[1] = hexConversion[item[1]]
+    });
+    
+    // add 2D array values together
+    let rgbArray = rgbHexArray 
+    rgbArray.forEach((item) => {
+      item = item[0] + item[1]
+    });
+    
+    // add all array elements together
+    let totalRGBValue = parseInt(rgbArray[0]) + parseInt(rgbArray[1]) + parseInt(rgbArray[2])
+    
+    // compare addition to half RGB input
+    if (totalRGBValue > 382.5) {
+      return require('../../assets/info.png')
+    } else {
+      return (require('../../assets/info_WHITE.png'))
+    }
   }
   
   useEffect(() => {
