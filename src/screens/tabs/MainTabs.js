@@ -10,7 +10,13 @@ import { TabContext } from '../../contexts/TabContext.js';
 const MainTabs = (props) => {
 
   const { setSection, setTitle, basket, total, removeFromTotal, removeFromBasket, addToTotal, addToBasket } = useContext(AppContext);
-  const { tabs, addTab, isCurrentTab, currentTabNumber, currentTabName, setIsCurrentTab, setCurrentTabNumber, setCurrentTabName, viewTabInfo, setViewTabInfo } = useContext(TabContext);
+  const { 
+    tabs, addTab,
+    isCurrentTab, setIsCurrentTab,
+    currentTabNumber, setCurrentTabNumber,
+    currentTabName, setCurrentTabName,
+    viewTabInfo, setViewTabInfo 
+  } = useContext(TabContext);
   const [ createTabRendering, setCreateTabRendering ] = useState('none')
   const [ viewTabRendering, setViewTabRendering ] = useState('none')
   const [ newTabNumber, setNewTabNumber ] = useState('1')
@@ -148,10 +154,9 @@ const MainTabs = (props) => {
           
           <View style={[{ width: wp('80%'), height: hp('58%'), zIndex: 10, backgroundColor: '#FFFFFF' }]}>
             
-            <ScrollView style={{ width: wp('80%'), height: hp('62%'), paddingTop: hp('1%') }}>{ iterateTabItems() }</ScrollView>
+            <ScrollView style={{ width: wp('80%'), height: hp('62%'), paddingTop: hp('1%') }}>{ RenderTabItems() }</ScrollView>
             <View style={{ position: 'absolute', width: wp('90%'), height: hp('5%'), bottom: hp('5%'), paddingRight: wp('5%') }}><Text style={{ textAlign: 'right', fontSize: hp('3%'), right: wp('10%') }}>£ { viewTabInfo.total.toFixed(2) }</Text></View>
           </View>
-          
           
         </View>
         
@@ -159,7 +164,7 @@ const MainTabs = (props) => {
     )
   }
   
-  const iterateTabItems = () => {
+  const RenderTabItems = () => {
     let render = []
     viewTabInfo.basket.forEach((item, idx) => {
       render.push(
@@ -245,7 +250,7 @@ const MainTabs = (props) => {
     return rendering;
   }
   
-  const updateTabButton = () => {
+  const RenderUpdateButton = () => {
     if (isCurrentTab != false && currentTabNumber != null) {
       return (
         <View style={{ width: wp('42.5%'), height: hp('7.5%'), backgroundColor: '#919191', marginTop: hp('2.5%'), marginLeft: wp('5%') }}>
@@ -307,7 +312,7 @@ const MainTabs = (props) => {
             </TouchableOpacity>
           </View>
           
-          { updateTabButton() }
+          { RenderUpdateButton() }
           
         </View>
         
@@ -321,7 +326,6 @@ const MainTabs = (props) => {
         { renderCreateTab() }
         { renderViewTabInfo() }
         
-        
       </View>
     )
   } else {
@@ -330,7 +334,7 @@ const MainTabs = (props) => {
         
         <View style={{ display: 'flex', flexDirection: 'row', marginBottom: hp('5%') }}>
       
-          { updateTabButton() }
+          { RenderUpdateButton() }
           
           <View style={{ width: wp('42.5%'), height: hp('7.5%'), backgroundColor: '#919191', marginTop: hp('2.5%'), marginLeft: wp('5%') }}>
             <TouchableOpacity
