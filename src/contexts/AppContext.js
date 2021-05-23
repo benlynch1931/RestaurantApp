@@ -59,7 +59,7 @@ class AppContextProvider extends Component {
   }
   
   setSelectedDepartment = (departmentID) => {
-    thi.setState({ selectedDepartment: departmentID })
+    this.setState({ selectedDepartment: departmentID })
   }
   
 
