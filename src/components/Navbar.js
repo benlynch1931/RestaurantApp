@@ -66,7 +66,7 @@ const Navbar = (props) => {
       <View style={{ position: 'fixed', top: 0, width: wp('100%'), height: hp('10%'), backgroundColor: '#FFFFFF', shadowColor: '#919191', shadowOffset: { height: 10, width: 0 }, shadowRadius: 4, shadowOpacity: 1}}>
         <Image source={require('../../assets/menu.png')} style={{ width: hp('9%'), height: hp('9%'), marginTop: hp('1.25%'), position: 'absolute', left: wp('0%') }} />
         <Text style={{ textAlign: 'center', marginTop: hp('3.25%'), fontSize: hp('3.5%') }}>{ title }</Text>
-        <TouchableOpacity onPress={() => { setSection('home'); setTitle('Home') }} style={{ width: hp('4.5%'), height: hp('4.5%'), marginTop: hp('3.5%'), position: 'absolute', right: wp('4.5%') }}>
+        <TouchableOpacity onPress={() => { setSection('view-groups'); setTitle('Home') }} style={{ width: hp('4.5%'), height: hp('4.5%'), marginTop: hp('3.5%'), position: 'absolute', right: wp('4.5%') }}>
           <Image source={require('../../assets/home.png')} style={{ width: hp('4.5%'), height: hp('4.5%') }} />
         </TouchableOpacity>
       </View>
