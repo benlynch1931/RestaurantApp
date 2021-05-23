@@ -71,23 +71,24 @@ const styles = StyleSheet.create({
   
   firstTouchableStyle: {
     width: wp("45%"),
-    paddingTop: hp('0.5%'),
-    paddingBottom: hp('0.5%')
+    height: hp('6%')
   },
   
   secondTouchableStyle: {
     width: wp("20%"),
-    paddingTop: hp('0.5%'),
-    paddingBottom: hp('0.5%')
+    height: hp('6%')
   },
   
   infoTouchableStyle: {
-    width: hp('6%')
+    width: hp('6%'),
+    height: hp('6%')
   },
   
   drinkTextStyle: {
     textAlign: 'center',
-    fontSize: hp('4.5%')
+    fontSize: hp('3.5%'),
+    lineHeight: hp('3.5%'),
+    marginTop: hp('1.25%')
   },
   viewTabWindowStyle: { 
     width: wp('90%'),
