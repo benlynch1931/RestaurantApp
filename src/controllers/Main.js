@@ -5,6 +5,8 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 
 import HomeScreen from '../screens/HomeScreen';
 import DepartmentScreen from '../screens/DepartmentScreen';
+import PLUScreen from '../screens/PLUScreen';
+
 import DrinkController from './DrinkController';
 import FoodController from './FoodController';
 import TabController from './TabController';
@@ -14,7 +16,7 @@ import DrinkContextProvider from '../contexts/DrinkContext.js';
 
 const MainController = (props) => {
 
-  const { section, selectedGroup } = useContext(AppContext);
+  const { section, selectedGroup, selectedDepartment } = useContext(AppContext);
 
   // if (section == 'home') {
   //   return (
@@ -44,16 +46,22 @@ const MainController = (props) => {
   //   )
   // }
   
-  if (section == 'view-groups') {
+  if (section === 'view-groups') {
     return (
       <View>
         <HomeScreen />
       </View>
     )
-  } else if (section == 'view-departments') {
+  } else if (section === 'view-departments') {
     return (
       <View>
-        <DepartmentScreen groupID={selectedGroup}/>
+        <DepartmentScreen groupID={selectedGroup} />
+      </View>
+    )
+  } else if (section === 'view-plus') {
+    return (
+      <View>
+        <PLUScreen departmentID={selectedDepartment} />
       </View>
     )
   } else if (section === 'view-tabs') {
