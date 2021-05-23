@@ -7,7 +7,7 @@ import { AppContext } from '../contexts/AppContext.js';
 
 const HomeScreen = (props) => {
 
-  const { setSection, setTitle, setGroups, groups } = useContext(AppContext);
+  const { setSection, setTitle, setGroups, groups, setSelectedGroup } = useContext(AppContext);
   
   const optionStyle = {
     width: wp('80%'),
@@ -37,7 +37,7 @@ const HomeScreen = (props) => {
     groups.forEach((group, idx) => {
       rendering.push(
         <View style={{ ...optionStyle, marginLeft: wp('10%') }}>
-          <TouchableOpacity style={{ width: wp("80%"), paddingTop: hp('7.5%'), paddingBottom: hp('7.5%') }} onPress={() => {  }}>
+          <TouchableOpacity style={{ width: wp("80%"), paddingTop: hp('7.5%'), paddingBottom: hp('7.5%') }} onPress={() => { setSelectedGroup(group.index); setSection('view-departments'); setTitle(group.group) }}>
             <Text style={{ alignSelf: 'center', fontSize: hp('5%') }}>{ group.group }</Text>
           </TouchableOpacity>
         </View>
@@ -45,7 +45,7 @@ const HomeScreen = (props) => {
     });
     rendering.push(
       <View style={{ ...optionStyle, marginLeft: wp('10%'), marginBottom: hp('5%') }}>
-        <TouchableOpacity style={{ width: wp("80%"), paddingTop: hp('7.5%'), paddingBottom: hp('7.5%') }} onPress={() => { setSection('tab'); setTitle('Tabs') }}>
+        <TouchableOpacity style={{ width: wp("80%"), paddingTop: hp('7.5%'), paddingBottom: hp('7.5%') }} onPress={() => { setSection('view-tabs'); setTitle('Tabs') }}>
           <Text style={{ alignSelf: 'center', fontSize: hp('5%') }}>TABS</Text>
         </TouchableOpacity>
       </View>
@@ -65,8 +65,6 @@ const HomeScreen = (props) => {
     
     </ScrollView>
   )
-
-
 }
 
 const styles = StyleSheet.create({
