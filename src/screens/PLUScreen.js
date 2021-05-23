@@ -1,4 +1,6 @@
 import React, { useContext, useEffect } from 'react';
+import { LOCALHOST_IP } from '@env'
+
 import { View, Text, TouchableOpacity, Image, StyleSheet, ScrollView } from 'react-native';
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -21,7 +23,7 @@ const PLUScreen = (props) => {
   } = useContext(AppContext);
   
   const fetchPLUs = () => {
-    fetch('http://192.168.1.213:6030/api/plus', {
+    fetch(`http://${LOCALHOST_IP}:6030/api/plus`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -88,7 +90,6 @@ const PLUScreen = (props) => {
   }
   
   const renderInfoPicture = (hexValue) => {
-    
     // split into array 
     let hexValueArray = hexValue.split('')
     

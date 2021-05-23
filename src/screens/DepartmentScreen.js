@@ -1,4 +1,6 @@
 import React, { useContext, useEffect } from 'react';
+import { LOCALHOST_IP } from '@env'
+
 import { View, Text, TouchableOpacity, Image, StyleSheet, ScrollView } from 'react-native';
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -12,7 +14,7 @@ const DepartmentScreen = (props) => {
   const { departments, setDepartments, setSection, setSelectedDepartment, setTitle } = useContext(AppContext);
   
   const fetchDepartments = () => {
-    fetch('http://192.168.1.213:6030/api/departments', {
+    fetch(`http://${LOCALHOST_IP}:6030/api/departments`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
