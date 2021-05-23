@@ -76,7 +76,7 @@ const DepartmentScreen = (props) => {
   return (
     <ScrollView style={{ width: wp('100%'), height: hp('82.5%'), backgroundColor: '#FFFFFF' }}>
     
-      { renderDepartments(2) }
+      { renderDepartments(props.groupID) }
     
     </ScrollView>
   )
