@@ -13,7 +13,8 @@ class AppContextProvider extends Component {
     departments: [],
     selectedDepartment: null,
     groups: [],
-    selectedGroup: null
+    selectedGroup: null,
+    pluList: []
   }
 
   setSection = (newSection, previousSection) => {
@@ -49,6 +50,10 @@ class AppContextProvider extends Component {
     this.setState({ groups: groups })
   }
   
+  setPluList = (plu) => {
+    this.setState({ pluList: plu })
+  }
+  
   setSelectedGroup = (groupID) => {
     this.setState({ selectedGroup: groupID })
   }
@@ -71,6 +76,7 @@ class AppContextProvider extends Component {
         
         setDepartments: this.setDepartments,
         setGroups: this.setGroups,
+        setPluList: this.setPluList,
         setSelectedGroup: this.setSelectedGroup,
         setSelectedDepartment: this.setSelectedDepartment
       }}>
