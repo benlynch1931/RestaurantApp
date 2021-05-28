@@ -3,13 +3,15 @@ import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, ScrollView 
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
+import { LOCALHOST_IP } from '@env'
+// import formatBasketForDatabase from './APITabs.js';
 
 import { AppContext } from '../../contexts/AppContext.js';
 import { TabContext } from '../../contexts/TabContext.js';
 
 const MainTabs = (props) => {
 
-  const { setSection, setTitle, basket, total, removeFromTotal, removeFromBasket, addToTotal, addToBasket } = useContext(AppContext);
+  const { setSection, setTitle, basket, total, removeFromTotal, removeFromBasket, addToTotal, addToBasket, addOrder, orders } = useContext(AppContext);
   const { 
     tabs, addTab,
     isCurrentTab, setIsCurrentTab,
@@ -59,6 +61,19 @@ const MainTabs = (props) => {
     removeFromBasket([])
   }
   
+  const createOrder = () => {
+    let dateTime = new Date()
+    addOrder([
+      {
+        name: newTabName || currentTabName,
+        number: newTabNumber || currentTabNumber,
+        time: `${dateTime.getHours()}: ${dateTime.getMinutes()}`,
+        total: total,
+        basket: basket
+      }
+    ])
+  }
+  
   const createTab = () => {
     addTab([
       ...tabs,
@@ -69,6 +84,8 @@ const MainTabs = (props) => {
         total: total
       }
     ]);
+    pushNewTabToDatabase(basket)
+    createOrder()
     removeFromTotal(0)
     removeFromBasket([])
     setNewTabName('')
@@ -77,6 +94,32 @@ const MainTabs = (props) => {
     setCurrentTabNumber(null)
     setCurrentTabName(null)
     setCreateTabRendering('none')
+  }
+  
+  const formatBasketForDatabase = (basket) => {
+    let basketArray = basket.map( basketItem => Object.entries(basketItem) );
+    basketArray = basketArray.map((basketItem) => {
+       basketItem = basketItem.map((itemAttributes) => itemAttributes.join(':') )
+       return basketItem.join(',')
+    })
+    basketArray = basketArray.join(';')
+    return basketArray;
+  }
+  
+  const pushNewTabToDatabase = (basket) => {
+    const body = {
+      name: newTabName || currentTabName,
+      number: newTabNumber || currentTabNumber,
+      total: total,
+      basket: formatBasketForDatabase(basket),
+    }
+    fetch(`http://${LOCALHOST_IP}:6030/api/tabs`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body)
+    })
   }
   
   const closeCreateTabRender = () => {
@@ -172,11 +215,11 @@ const MainTabs = (props) => {
 
           
           <View style={{ position: 'absolute', left: wp('5%') }}>
-            <Text style={{ fontSize: hp('3%') }}>1 x {item[0]}</Text>
+            <Text style={{ fontSize: hp('3%') }}>1 x {item.label}</Text>
           </View>
           
           <View style={{ position: 'absolute', right: wp('5%') }}>
-            <Text style={{ fontSize: hp('3%') }}>£ {item[1].toFixed(2)}</Text>
+            <Text style={{ fontSize: hp('3%') }}>£ {item.price.toFixed(2)}</Text>
           </View>
         </View>
       )
