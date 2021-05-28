@@ -38,10 +38,29 @@ const PLUScreen = (props) => {
   const pressAddToBasket = (plu, priceType) => {
     if (priceType == 'first') {
       addToTotal(parseFloat(plu.first_price) + total)
-      addToBasket([...basket, [plu.title, parseFloat(plu.first_price)]])
+      addToBasket([
+        ...basket,
+        {
+          label: plu.title,
+          price: plu.first_price,
+          displayBar: plu.display_bar,
+          displayKitchen: plu.display_kitchen
+        }
+      ])
+      // addToBasket([...basket, [plu.title, parseFloat(plu.first_price)]])
     } else if (priceType == 'second') {
       addToTotal(parseFloat(plu.second_price) + total)
-      addToBasket([...basket, [`${plu.second_modifier} ${plu.title}`, parseFloat(plu.second_price)]])
+      addToBasket([
+        ...basket,
+        {
+          label: `${plu.second_modifier} ${plu.title}`,
+          price: plu.second_price,
+          displayBar: plu.display_bar,
+          displayKitchen: plu.display_kitchen
+        }
+      ])
+      // addToBasket([...basket, [`${plu.second_modifier} ${plu.title}`, parseFloat(plu.second_price)]])
+  
     }
     
   }
