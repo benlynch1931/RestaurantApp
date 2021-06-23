@@ -1,12 +1,12 @@
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { LOCALHOST_IP } from '@env'
 
-export const pushToTab = (tabName, tabId, total, basket, tabBasket) => {
-  const formattedBasket = `${formatBasketForDatabase(tabBasket)};${formatBasketForDatabase(basket)}`
+export const pushNewTabToDatabase = (tabName, tabId, total, basket) => {
+  const formattedBasket = `${formatBasketForDatabase(basket)}`
   
   const body = {
-    name: newTabName || currentTabName,
-    number: newTabNumber || currentTabNumber,
+    name: tabName,
+    id: tabId,
     total: total,
     basket: formattedBasket,
   }
@@ -19,12 +19,12 @@ export const pushToTab = (tabName, tabId, total, basket, tabBasket) => {
   })
 }
 
-export const updateExistingTab = (tabName, tabId, total, tabBasket) => {
+export const updateExistingTabInDatabase = (tabName, tabId, total, tabBasket) => {
   const formattedBasket = `${formatBasketForDatabase(tabBasket)}`
   
   const body = {
     name: tabName,
-    number: tabId,
+    id: tabId,
     total: total,
     basket: formattedBasket,
   }
@@ -43,53 +43,21 @@ export const extractBasketInfo = (tabBasket) => {
   const separateItems = tabBasket.split(';')
   separateItems.forEach((item, idx) => {
     const itemInfoSplit = item.split(',')
-    // if (itemsQuantities[itemInfoSplit[0].split(':')[1]] === undefined) {
-      itemsQuantities[itemInfoSplit[0].split(':')[1]] = {
-          // label: itemInfoSplit[0].split(':')[1],
-          // quantity: itemInfoSplit[1].split(':')[1],
-          // price: stringToFloat(itemInfoSplit[1].split(':')[1]),
-          // displayBar: stringToBoolean(itemInfoSplit[2].split(':')[1]),
-          // displayKitchen: stringToBoolean(itemInfoSplit[3].split(':')[1])
-          
-          [itemInfoSplit[0].split(':')[0]]: convertValue(itemInfoSplit[0].split(':')),
-          [itemInfoSplit[1].split(':')[0]]: convertValue(itemInfoSplit[1].split(':')),
-          [itemInfoSplit[2].split(':')[0]]: convertValue(itemInfoSplit[2].split(':')),
-          [itemInfoSplit[3].split(':')[0]]: convertValue(itemInfoSplit[3].split(':')),
-          [itemInfoSplit[4].split(':')[0]]: convertValue(itemInfoSplit[4].split(':'))
-        }
-    // }
-    // itemsQuantities[itemInfoSplit[0].split(':')[1]]['quantity'] += 1
-    
-    // formattedItems.push(
-    //   {
-    //     label: itemInfoSplit[0].split(':')[1],
-    //     quantity: 1,
-    //     price: stringToFloat(itemInfoSplit[1].split(':')[1]),
-    //     displayBar: stringToBoolean(itemInfoSplit[2].split(':')[1]),
-    //     displayKitchen: stringToBoolean(itemInfoSplit[3].split(':')[1])
-    //   }
-    // )
-    
+    itemsQuantities[itemInfoSplit[0].split(':')[1]] = {
+        [itemInfoSplit[0].split(':')[0]]: convertValue(itemInfoSplit[0].split(':')),
+        [itemInfoSplit[1].split(':')[0]]: convertValue(itemInfoSplit[1].split(':')),
+        [itemInfoSplit[2].split(':')[0]]: convertValue(itemInfoSplit[2].split(':')),
+        [itemInfoSplit[3].split(':')[0]]: convertValue(itemInfoSplit[3].split(':')),
+        [itemInfoSplit[4].split(':')[0]]: convertValue(itemInfoSplit[4].split(':'))
+      }
   });
-  // console.log(itemsQuantities)
   const itemsQuantitiesArray = Object.entries(itemsQuantities)
   itemsQuantitiesArray.forEach((item, idx) => {
     formattedItems.push(item[1])
   });
-  // {
-//    tribute: {
-//      label: ,
-//      quantity: ,
-//    },
-//    {
-//      label: ,
-//      quantity: ,
-//    }
-// }
-  // console.log(formattedItems)
+
   return formattedItems;
   
-  // Next step: store quantities at value > 1
   
 }
 
@@ -104,6 +72,71 @@ const convertValue = ([key, value]) => {
     return value
   }
 }
+
+export const addItemsToExistingTab = (basket, tab, currentTabIndexPosition, tabList) => {
+  let updatedTabBasket = []
+  basket.forEach((basketItem, basketIndex) => {
+    let edited = false
+    tab.basket.forEach((tabItem, TabBasketIndex) => {
+        console.log(`${basketItem.label}: ${tabItem.label}`)
+        if (tabItem.label === basketItem.label) {
+          edited = true
+          tabItem.quantity += basketItem.quantity
+          return
+        }
+    });
+    // if the basket item isn't in the tab basket (using edited var)
+    if (edited === false) {
+      updatedTabBasket.push(basketItem)
+    }
+  });
+  updatedTabBasket.splice(0, 0, ...tab.basket)
+  let newTotal = 0
+  updatedTabBasket.forEach((item, i) => {
+    newTotal += item.price * item.quantity
+  });
+  let updatedTab = tab
+  updatedTab.basket = updatedTabBasket
+  updatedTab.total = newTotal
+  const updatedTabList = tabList.splice(currentTabIndexPosition, 1, updatedTab)
+  return [updatedTabList, updatedTab]
+  
+}
+
+const createNewOrder = () => {
+  
+}
+
+export const removeItemFromExistingTab = (itemLabel, basket, basketIndex, currentTabIndexPosition, tabs) => {
+  const originalBasket = basket;
+  let updatedBasket = [];
+  const originalTabList = tabs;
+  const originalTab = tabs[currentTabIndexPosition];
+  basket.forEach((basketItem, idx) => {
+    // if quantity over 1, remove 1
+    if (itemLabel === basketItem.label && basketItem.quantity > 1) {
+      basketItem.quantity -= 1;
+      updatedBasket.push(basketItem)
+    // if it's not the right item just keep it the same
+    } else if (itemLabel != basketItem.label) {
+      updatedBasket.push(basketItem)
+    }
+    // (hidden) if the quantity is 1, `remove` item by not pushing it to new basket
+  });
+  let newTotal = 0
+  updatedBasket.forEach((item, i) => {
+    newTotal += item.price * item.quantity
+  });
+  
+  let updatedTab = originalTab
+  updatedTab.basket = updatedBasket;
+  updatedTab.total = newTotal;
+  let newTabList = originalTabList
+  newTabList.splice(currentTabIndexPosition, 1, updatedTab)
+  return [newTabList, updatedTab];
+}
+
+
 
 export const formatTabs = (tabs) => {
   let formattedTabs = []
