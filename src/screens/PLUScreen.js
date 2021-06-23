@@ -18,12 +18,12 @@ const PLUScreen = (props) => {
   
   const { 
     pluList, setPluList,
-    addToTotal, total,
+    setTotal, total,
     addToBasket, basket 
   } = useContext(AppContext);
   
-  const fetchPLUs = () => {
-    fetch(`http://${LOCALHOST_IP}:6030/api/plus`, {
+  const fetchPLUs = (departments_id) => {
+    fetch(`http://${LOCALHOST_IP}:6030/api/plus?departments_id=${departments_id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -36,32 +36,62 @@ const PLUScreen = (props) => {
   }
   
   const pressAddToBasket = (plu, priceType) => {
-    if (priceType == 'first') {
-      addToTotal(parseFloat(plu.first_price) + total)
-      addToBasket([
-        ...basket,
-        {
-          label: plu.title,
-          price: plu.first_price,
-          displayBar: plu.display_bar,
-          displayKitchen: plu.display_kitchen
-        }
-      ])
-      // addToBasket([...basket, [plu.title, parseFloat(plu.first_price)]])
-    } else if (priceType == 'second') {
-      addToTotal(parseFloat(plu.second_price) + total)
-      addToBasket([
-        ...basket,
-        {
-          label: `${plu.second_modifier} ${plu.title}`,
-          price: plu.second_price,
-          displayBar: plu.display_bar,
-          displayKitchen: plu.display_kitchen
-        }
-      ])
-      // addToBasket([...basket, [`${plu.second_modifier} ${plu.title}`, parseFloat(plu.second_price)]])
-  
+    // if (priceType == 'first') {
+    //   setTotal(parseFloat(plu.first_price) + total)
+    //   addToBasket([
+    //     ...basket,
+    //     {
+    //       label: plu.title,
+    //       quantity: 1,
+    //       price: plu.first_price,
+    //       displayBar: plu.display_bar,
+    //       displayKitchen: plu.display_kitchen
+    //     }
+    //   ])
+    // } else if (priceType == 'second') {
+    //   setTotal(parseFloat(plu.second_price) + total)
+    //   addToBasket([
+    //     ...basket,
+        // {
+        //   label: `${plu.second_modifier} ${plu.title}`,
+        //   quantity: 1,
+        //   price: plu.second_price,
+        //   displayBar: plu.display_bar,
+        //   displayKitchen: plu.display_kitchen
+        // }
+    //   ])
+    // }
+    let title = "";
+    let price = 0
+    let exists = false
+    if (priceType === 'first') {
+      title = plu.title
+      price = plu.first_price
+    } else if (priceType === 'second') {
+      title = `${plu.second_modifier} ${plu.title}`
+      price = plu.second_price
     }
+    let newBasket = []
+    basket.forEach((item, idx) => {
+      console.log(item.label, " : ", title)
+      if (item.label === title) {
+        exists = true
+        item.quantity += 1
+      }
+      newBasket.push(item)
+    });
+    if (exists === false) {
+      
+      newBasket.push({
+        label: title,
+        quantity: 1,
+        price: parseFloat(price),
+        displayBar: plu.display_bar,
+        displayKitchen: plu.display_kitchen
+      })
+    }
+    setTotal(total + parseFloat(price))
+    addToBasket(newBasket)
     
   }
   
@@ -79,29 +109,33 @@ const PLUScreen = (props) => {
     const specificPLUs = getSpecificPLUs(departmentID)
     let rendering = [];
     specificPLUs.forEach((plu, idx) => {
-      rendering.push(
-        <View key={`main ${idx}`} style={{ display: 'flex', flexDirection: 'row' }}>
-        
-          <View key={`firstMod ${idx}`}style={[styles.firstOptionStyle, { marginLeft: wp('5%') }]}>
-            <TouchableOpacity key={`firstModButton ${idx}`} style={{ ...styles.firstTouchableStyle, backgroundColor: plu.background }} onPress={() => { pressAddToBasket(plu, 'first') }}>
-              <Text key={`firstModLabel ${idx}`} style={{ ...styles.drinkTextStyle, color: plu.text }}>{plu.title}</Text>
-            </TouchableOpacity>
-          </View>
+      if (plu.title != '' && plu.title != 'NO DESCRPTION') {
+        console.log(plu.second_modifier)
+        rendering.push(
+          <View key={`main ${idx}`} style={{ display: 'flex', flexDirection: 'row' }}>
           
-          <View key={`secondMod ${idx}`} style={styles.secondOptionStyle }>
-            <TouchableOpacity key={`secondModButton ${idx}`} style={{ ...styles.secondTouchableStyle, backgroundColor: plu.background }} onPress={() => { pressAddToBasket(plu, 'second') }}>
-              <Text key={`secondModLabel ${idx}`} style={{ ...styles.drinkTextStyle, color: plu.text }}>{ plu.second_modifier }</Text>
-            </TouchableOpacity>
+            <View key={`firstMod ${idx}`} style={plu.second_quantity != 0 ? [styles.firstOptionStyle, { marginLeft: wp('5%') }] : [styles.firstOptionStyle, { width: wp('70%'), marginLeft: wp('5%') }]}>
+              <TouchableOpacity key={`firstModButton ${idx}`} style={ plu.second_quantity != 0 ? { ...styles.firstTouchableStyle, backgroundColor: plu.background } : { ...styles.firstTouchableStyle, width: wp('70%'), backgroundColor: plu.background }} onPress={() => { pressAddToBasket(plu, 'first') }}>
+                <Text key={`firstModLabel ${idx}`} style={{ ...styles.drinkTextStyle, color: plu.text }}>{plu.title}</Text>
+              </TouchableOpacity>
+            </View>
+            
+            <View key={`secondMod ${idx}`} style={plu.second_quantity != 0 ? styles.secondOptionStyle : { display: 'none' } }>
+              <TouchableOpacity key={`secondModButton ${idx}`} style={plu.second_quantity != 0 ? { ...styles.secondTouchableStyle, backgroundColor: plu.background } : { display: 'none' }} onPress={() => { pressAddToBasket(plu, 'second') }}>
+                <Text key={`secondModLabel ${idx}`} style={{ ...styles.drinkTextStyle, color: plu.text }}>{ plu.second_modifier }</Text>
+              </TouchableOpacity>
+            </View>
+            
+            <View key={`info ${idx}`} style={{ ...styles.infoOptionStyle, backgroundColor: plu.background }}>
+              <TouchableOpacity key={`infoButton ${idx}`} style={styles.infoTouchableStyle} onPress={() => {  }}>
+                <Image key={`infoIcon ${idx}`} source={renderInfoPicture(plu.background)} style={{ height: hp('5%'), width: hp('5%'), marginTop: hp('0.5%'), marginLeft: hp('0.5%')}} />
+              </TouchableOpacity>
+            </View>
+            
           </View>
-          
-          <View key={`info ${idx}`} style={{ ...styles.infoOptionStyle, backgroundColor: plu.background }}>
-            <TouchableOpacity key={`infoButton ${idx}`} style={styles.infoTouchableStyle} onPress={() => {  }}>
-              <Image key={`infoIcon ${idx}`} source={renderInfoPicture(plu.background)} style={{ height: hp('5%'), width: hp('5%'), marginTop: hp('0.5%'), marginLeft: hp('0.5%')}} />
-            </TouchableOpacity>
-          </View>
-          
-        </View>
-      )
+        )
+      }
+      
     });
     
     return rendering;
@@ -144,7 +178,7 @@ const PLUScreen = (props) => {
   }
   
   useEffect(() => {
-    fetchPLUs()
+    fetchPLUs(props.departmentID)
   }, [])
   
   return (
