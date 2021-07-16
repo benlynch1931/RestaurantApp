@@ -14,7 +14,7 @@ const DepartmentScreen = (props) => {
   const { departments, setDepartments, setSection, setSelectedDepartment, setTitle } = useContext(AppContext);
   
   const fetchDepartments = () => {
-    fetch(`http://${LOCALHOST_IP}:6030/api/departments`, {
+    fetch(`http://92.16.101.121:6030/api/departments`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -22,7 +22,6 @@ const DepartmentScreen = (props) => {
     })
     .then(res => res.json())
     .then(data => {
-      console.log(data.departments)
       setDepartments(data.departments)
     })
   }
@@ -44,25 +43,25 @@ const DepartmentScreen = (props) => {
       // if can render two departments in a row
       if (idx <= specificDepartments.length - 2) {
         rendering.push(
-          <View style={styles.rowStyle}>
-            <View style={{ ...styles.optionStyle, marginRight: wp('10%') }}>
-              <TouchableOpacity style={styles.touchableStyle} onPress={() => { setSelectedDepartment(specificDepartments[idx].index); setSection('view-plus'); setTitle(specificDepartments[idx].name) }}>
-                <Text style={styles.textStyle}>{ specificDepartments[idx].name }</Text>
+          <View key={`main ${idx}-${idx+1}`} style={styles.rowStyle}>
+            <View key={`eachDiv #${idx}`} style={{ ...styles.optionStyle, marginRight: wp('10%') }}>
+              <TouchableOpacity key={`eachButton #${idx}`} style={styles.touchableStyle} onPress={() => { setSelectedDepartment(specificDepartments[idx].index); setSection('view-plus'); setTitle(specificDepartments[idx].name) }}>
+                <Text key={`eachButtonText #${idx}`} style={styles.textStyle}>{ specificDepartments[idx].name }</Text>
               </TouchableOpacity>
             </View>
             
-            <View style={styles.optionStyle}>
-              <TouchableOpacity style={styles.touchableStyle} onPress={() => { setSelectedDepartment(specificDepartments[idx+1].index); setSection('view-plus'); setTitle(specificDepartments[idx+1].name) }}>
-                <Text style={{ ...styles.textStyle }}>{ specificDepartments[idx+1].name }</Text>
+            <View key={`eachDiv #${idx+1}`} style={styles.optionStyle}>
+              <TouchableOpacity key={`eachButton #${idx+1}`} style={styles.touchableStyle} onPress={() => { setSelectedDepartment(specificDepartments[idx+1].index); setSection('view-plus'); setTitle(specificDepartments[idx+1].name) }}>
+                <Text key={`eachButtonText #${idx+1}`} style={{ ...styles.textStyle }}>{ specificDepartments[idx+1].name }</Text>
               </TouchableOpacity>
             </View>
           </View>
         )
       } else {
         rendering.push(
-          <View style={styles.rowStyle}>
-            <TouchableOpacity style={styles.touchableStyle} onPress={() => { setSelectedDepartment(specificDepartments[idx].index); setSection('view-plus'); setTitle(specificDepartments[idx].name) }}>
-              <Text style={{ ...styles.textStyle }}>{ specificDepartments[idx].name }</Text>
+          <View key={`eachDiv #${idx}`} style={styles.rowStyle}>
+            <TouchableOpacity key={`eachButton #${idx}`} style={styles.touchableStyle} onPress={() => { setSelectedDepartment(specificDepartments[idx].index); setSection('view-plus'); setTitle(specificDepartments[idx].name) }}>
+              <Text key={`eachButtonText #${idx}`} style={{ ...styles.textStyle }}>{ specificDepartments[idx].name }</Text>
             </TouchableOpacity>
           </View>
         )

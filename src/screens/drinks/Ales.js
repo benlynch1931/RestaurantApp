@@ -132,10 +132,7 @@ const Ales = (props) => {
           <Text style={{ fontSize: hp('3%'), lineHeight: hp('6%'), marginTop: hp('2%') }}>ABV: { selectedDrink.alcoholPercentage }% | £{ selectedDrink.firstPrice.toFixed(2) }</Text>
           <View style={{ borderBottomWidth: 1 }}></View>
           <Text style={{ fontSize: hp('6%'), lineHeight: hp('6%'), marginTop: hp('2%') }}>{ selectedDrink.description }</Text>
-          
-  
-          
-          
+
         </View>
         
       </View>

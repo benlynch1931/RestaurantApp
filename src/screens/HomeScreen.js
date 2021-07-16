@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { LOCALHOST_IP } from '@env'
+import { DOMAIN_IP } from '@env'
 
 import { View, Text, TouchableOpacity, Image, StyleSheet, ScrollView } from 'react-native';
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
@@ -22,12 +22,13 @@ const HomeScreen = (props) => {
   }
   
   const fetchGroups = () => {
-    fetch(`http://${LOCALHOST_IP}:6030/api/groups`, {
+    fetch(`http://${DOMAIN_IP}:6030/api/groups`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       }
     })
+    // .then(res => console.log(res))
     .then(res => res.json())
     .then(data => {
       setGroups(data.groups)

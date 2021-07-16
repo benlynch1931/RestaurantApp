@@ -23,7 +23,7 @@ const PLUScreen = (props) => {
   } = useContext(AppContext);
   
   const fetchPLUs = (departments_id) => {
-    fetch(`http://${LOCALHOST_IP}:6030/api/plus?departments_id=${departments_id}`, {
+    fetch(`http://92.16.101.121:6030/api/plus?departments_id=${departments_id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -31,36 +31,12 @@ const PLUScreen = (props) => {
     })
     .then(res => res.json())
     .then(data => {
+      console.log(data.plu_items.length)
       setPluList(data.plu_items)
     })
   }
   
   const pressAddToBasket = (plu, priceType) => {
-    // if (priceType == 'first') {
-    //   setTotal(parseFloat(plu.first_price) + total)
-    //   addToBasket([
-    //     ...basket,
-    //     {
-    //       label: plu.title,
-    //       quantity: 1,
-    //       price: plu.first_price,
-    //       displayBar: plu.display_bar,
-    //       displayKitchen: plu.display_kitchen
-    //     }
-    //   ])
-    // } else if (priceType == 'second') {
-    //   setTotal(parseFloat(plu.second_price) + total)
-    //   addToBasket([
-    //     ...basket,
-        // {
-        //   label: `${plu.second_modifier} ${plu.title}`,
-        //   quantity: 1,
-        //   price: plu.second_price,
-        //   displayBar: plu.display_bar,
-        //   displayKitchen: plu.display_kitchen
-        // }
-    //   ])
-    // }
     let title = "";
     let price = 0
     let exists = false
@@ -73,7 +49,6 @@ const PLUScreen = (props) => {
     }
     let newBasket = []
     basket.forEach((item, idx) => {
-      console.log(item.label, " : ", title)
       if (item.label === title) {
         exists = true
         item.quantity += 1
@@ -109,20 +84,19 @@ const PLUScreen = (props) => {
     const specificPLUs = getSpecificPLUs(departmentID)
     let rendering = [];
     specificPLUs.forEach((plu, idx) => {
-      if (plu.title != '' && plu.title != 'NO DESCRPTION') {
-        console.log(plu.second_modifier)
+      if (plu.title != '' && plu.title != 'NO DESCRIPTION') {
         rendering.push(
           <View key={`main ${idx}`} style={{ display: 'flex', flexDirection: 'row' }}>
           
             <View key={`firstMod ${idx}`} style={plu.second_quantity != 0 ? [styles.firstOptionStyle, { marginLeft: wp('5%') }] : [styles.firstOptionStyle, { width: wp('70%'), marginLeft: wp('5%') }]}>
-              <TouchableOpacity key={`firstModButton ${idx}`} style={ plu.second_quantity != 0 ? { ...styles.firstTouchableStyle, backgroundColor: plu.background } : { ...styles.firstTouchableStyle, width: wp('70%'), backgroundColor: plu.background }} onPress={() => { pressAddToBasket(plu, 'first') }}>
-                <Text key={`firstModLabel ${idx}`} style={{ ...styles.drinkTextStyle, color: plu.text }}>{plu.title}</Text>
+              <TouchableOpacity key={`firstModButton ${idx}`} style={ plu.second_quantity != 0 ? { ...styles.firstTouchableStyle, backgroundColor: plu.background, borderWidth: isPluButtonDisabled(plu) ? 2 : 0, borderColor: '#FF0000' } : { ...styles.firstTouchableStyle, width: wp('70%'), backgroundColor: plu.background, borderWidth: isPluButtonDisabled(plu) ? 2 : 0, borderColor: '#FF0000' }} onPress={() => { pressAddToBasket(plu, 'first') }} disabled={ isPluButtonDisabled(plu) }>
+                <Text key={`firstModLabel ${idx}`} style={{ ...styles.drinkTextStyle, color: isPluButtonDisabled(plu) ? '#FF0000' : plu.text }}>{plu.title}</Text>
               </TouchableOpacity>
             </View>
             
             <View key={`secondMod ${idx}`} style={plu.second_quantity != 0 ? styles.secondOptionStyle : { display: 'none' } }>
-              <TouchableOpacity key={`secondModButton ${idx}`} style={plu.second_quantity != 0 ? { ...styles.secondTouchableStyle, backgroundColor: plu.background } : { display: 'none' }} onPress={() => { pressAddToBasket(plu, 'second') }}>
-                <Text key={`secondModLabel ${idx}`} style={{ ...styles.drinkTextStyle, color: plu.text }}>{ plu.second_modifier }</Text>
+              <TouchableOpacity key={`secondModButton ${idx}`} style={plu.second_quantity != 0 ? { ...styles.secondTouchableStyle, backgroundColor: plu.background, borderWidth: isPluButtonDisabled(plu) ? 2 : 0, borderColor: '#FF0000' } : { display: 'none' }} onPress={() => { pressAddToBasket(plu, 'second') }} disabled={ isPluButtonDisabled(plu) }>
+                <Text key={`secondModLabel ${idx}`} style={{ ...styles.drinkTextStyle, color: isPluButtonDisabled(plu) ? '#FF0000' : plu.text }}>{ plu.second_modifier }</Text>
               </TouchableOpacity>
             </View>
             
@@ -142,11 +116,21 @@ const PLUScreen = (props) => {
     
   }
   
+  const isPluButtonDisabled = (plu) => {
+    if (plu.stock_controlled === true) {
+      if (plu.stock_count === 0) {
+        return true
+      }
+      return false
+    }
+    return false
+  }
+  
   const renderInfoPicture = (hexValue) => {
     // split into array 
     let hexValueArray = hexValue.split('')
     
-    // remove hash 
+    // remove hashtag
     hexValueArray.shift()
     
     // group into 3x 2D arrays of 2 elements

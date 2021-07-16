@@ -7,19 +7,27 @@ import { AppContext } from '../contexts/AppContext.js';
 
 const Navbar = (props) => {
 
-  const { title, total, basket, removeFromBasket, removeFromTotal, setSection, setTitle } = useContext(AppContext);
+  const { title, total, basket, setBasket, setSection, setTitle, setTotal } = useContext(AppContext);
   const [displayBasket, setDisplayBasket] = useState('none')
   
-  const removeItem = (itemName, itemPrice) => {
-    if (basket.length > 1) {
-      const indexToRemove = basket.indexOf([itemName, itemPrice])
-      const newBasket = basket.splice(indexToRemove, 1)
-      removeFromBasket(newBasket)
-    } else {
-      removeFromBasket([])
+  const removeItem = ({ label, price }) => {
+    let updatedBasket = []
+    basket.forEach((basketItem, i) => {
+      if (basketItem.label === label) {
+        if (basketItem.quantity > 1) {
+          basketItem.quantity -= 1
+          updatedBasket.push(basketItem)
+        }
+      } else {
+        updatedBasket.push(basketItem)
+      }
+    });
+    setBasket(updatedBasket)
+    const newTotal = total - price
+    if (newTotal < 0) {
+      newTotal = 0
     }
-    const newTotal = total - itemPrice
-    removeFromTotal(newTotal)
+    setTotal(newTotal)
   }
   
   const iterateBasketItems = () => {
@@ -28,17 +36,17 @@ const Navbar = (props) => {
       render.push(
         <View style={{ position: 'relative', height: hp('5%') }}>
           <View style={{ position: 'absolute', left: wp('2.5%') }}>
-            <TouchableOpacity onPress={() => { removeItem(item[0], item[1]) }} style={{ width: wp('10%'), height: hp('5%') }}>
+            <TouchableOpacity onPress={() => { removeItem(item) }} style={{ width: wp('10%'), height: hp('5%') }}>
               <Image source={require('../../assets/delete.png')} style={{ height: hp('2.5%'), width: hp('2.2%'), marginTop: hp('1.05%'), marginLeft: ((wp('10%') - hp('2.2%')) / 2) - wp('2%') }} />
             </TouchableOpacity>
           </View>
           
           <View style={{ position: 'absolute', left: wp('12.5%') }}>
-            <Text style={{ fontSize: hp('3%'), lineHeight: hp('3%'), marginTop: hp('1%') }}>{item[0]}</Text>
+            <Text style={{ fontSize: hp('3%'), lineHeight: hp('3%'), marginTop: hp('1%') }}>{item.quantity} x {item.label}</Text>
           </View>
           
           <View style={{ position: 'absolute', right: wp('5%') }}>
-            <Text style={{ fontSize: hp('3%'), lineHeight: hp('3%'), marginTop: hp('1%') }}>£ {item[1].toFixed(2)}</Text>
+            <Text style={{ fontSize: hp('3%'), lineHeight: hp('3%'), marginTop: hp('1%') }}>£ {(item.quantity * item.price).toFixed(2)}</Text>
           </View>
         </View>
       )
@@ -74,11 +82,8 @@ const Navbar = (props) => {
   } else if (props.location == 'bottom') {
     return (
       <View style={{ position: 'fixed', bottom: 0, width: wp('100%'),  height: hp('7.5%'), backgroundColor: '#FFFFFF', shadowColor: '#919191', shadowOffset: { height: 10, width: 0 }, shadowRadius: 4, shadowOpacity: 1}}>
-        <TouchableOpacity onPress={() => { setDisplayBasket('block') }}><Text style={{ textAlign: 'center', marginTop: hp('1.5%'), fontSize: hp('3.5%') }}>£ { total.toFixed(2).toString() }</Text></TouchableOpacity>
+        <TouchableOpacity onPress={() => { setDisplayBasket('block') }}><Text style={{ textAlign: 'center', marginTop: hp('1.5%'), fontSize: hp('3.5%') }}>£ { total.toFixed(2) }</Text></TouchableOpacity>
         { renderBasket() }
-        {/* useEffect(() => {
-          renderBasket()
-        }, [basket]) */}
       </View>
       
     )

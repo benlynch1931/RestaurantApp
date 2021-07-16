@@ -4,7 +4,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 import { AppContext } from '../../contexts/AppContext.js';
-import { pushNewTabToDatabase, xtractBasketInfo, isLastItemInBasket, formatTabs, updateExistingTabInDatabase, removeItemFromExistingTab, addItemsToExistingTab } from '../../components/TabLogic.js'
+import { pushNewTabToDatabase, extractBasketInfo, isLastItemInBasket, formatTabs, updateExistingTabInDatabase, removeItemFromExistingTab, addItemsToExistingTab, createNewOrder, updateReportings } from '../../components/TabLogic.js'
 import { LOCALHOST_IP } from '@env'
 
 const MainTabs = () => {
@@ -22,6 +22,7 @@ const MainTabs = () => {
   useEffect(() => {
     fetchTabs()
   }, [])
+  
   
   const fetchTabs = () => {
     fetch(`http://${LOCALHOST_IP}:6030/api/tabs`, {
@@ -77,6 +78,8 @@ const MainTabs = () => {
   
   const createTab = () => {
     pushNewTabToDatabase(newTabName, newTabNumber, total, basket)
+    createNewOrder(basket, newTabNumber, total, false)
+    updateReportings('GROSS_total', total)
     closeCreateTabRender()
     setBasket([])
     setTotal(0)
@@ -223,8 +226,10 @@ const MainTabs = () => {
   
   const addItemsToExistingTabHandler = (basket, tab, currentTabIndexPosition) => {
     const [updatedTabList, updatedTab] = addItemsToExistingTab(basket, tab, currentTabIndexPosition, tabs)
-    setTabs(updatedTabList)
+    createNewOrder(basket, tab.id, total, false)
+    setTabs(updatedTabList) 
     updateExistingTabInDatabase(updatedTab.name, updatedTab.id, updatedTab.total, updatedTab.basket)
+    updateReportings('GROSS_total', total)
     setBasket([])
     setTotal(0)
 

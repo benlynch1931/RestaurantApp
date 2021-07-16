@@ -14,7 +14,8 @@ class AppContextProvider extends Component {
     selectedDepartment: null,
     groups: [],
     selectedGroup: null,
-    pluList: []
+    pluList: [],
+    orders: []
   }
 
   setSection = (newSection, previousSection) => {
@@ -26,19 +27,16 @@ class AppContextProvider extends Component {
     this.setState({ title: newTitle })
   }
   
-  addToTotal = (addition) => {
+  setTotal = (addition) => {
     this.setState({ total: addition })
   }
   
-  removeFromTotal = (subtraction) => {
-    this.setState({ total: subtraction })
-  }
   
   addToBasket = (basket) => {
     this.setState({ basket: basket })
   }
   
-  removeFromBasket = (basket) => {
+  setBasket = (basket) => {
     this.setState({ basket: basket })
   }
   
@@ -62,6 +60,10 @@ class AppContextProvider extends Component {
     this.setState({ selectedDepartment: departmentID })
   }
   
+  addOrder = (newOrder) => {
+    this.setState({ orders: [ ...this.state.orders, ...newOrder ] })
+  }
+  
 
   render() {
     return (
@@ -69,10 +71,11 @@ class AppContextProvider extends Component {
         ...this.state,
         setSection: this.setSection,
         setTitle: this.setTitle,
-        addToTotal: this.addToTotal,
-        removeFromTotal: this.removeFromTotal,
+        setTotal: this.setTotal,
         addToBasket: this.addToBasket,
-        removeFromBasket: this.removeFromBasket,
+        setBasket: this.setBasket,
+        
+        addOrder: this.addOrder,
         
         setDepartments: this.setDepartments,
         setGroups: this.setGroups,

@@ -49,7 +49,7 @@ const Main = (props) => {
       <View style={styles.optionStyle}>
         <TouchableOpacity style={styles.touchableStyle} onPress={() => { setScreen('softs'); setTitle('Soft Drinks') }}>
           <Text style={[styles.textStyle, { marginTop: hp('5%') }]}>Soft Drinks</Text>
-          </TouchableOpacity>
+        </TouchableOpacity>
       </View>
       
     </View>

@@ -1,5 +1,18 @@
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { LOCALHOST_IP } from '@env'
+import { DOMAIN_IP } from '@env'
+
+const REPORTINGS_BODY = {
+    "NET_total": 0,
+    "GROSS_total": 0,
+    "CASH_total": 0,
+    "CARD_total": 0,
+    "total": 0,
+    "GROUP_total": 0,
+    "DEPARTMENT_total": 0,
+    "BAR_total": 0,
+    "KITCHEN_total": 0,
+    "no_of_tabs": 0
+}
 
 export const pushNewTabToDatabase = (tabName, tabId, total, basket) => {
   const formattedBasket = `${formatBasketForDatabase(basket)}`
@@ -10,7 +23,7 @@ export const pushNewTabToDatabase = (tabName, tabId, total, basket) => {
     total: total,
     basket: formattedBasket,
   }
-  fetch(`http://${LOCALHOST_IP}:6030/api/tabs`, {
+  fetch(`http://${DOMAIN_IP}:6030/api/tabs`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -28,10 +41,40 @@ export const updateExistingTabInDatabase = (tabName, tabId, total, tabBasket) =>
     total: total,
     basket: formattedBasket,
   }
-  fetch(`http://${LOCALHOST_IP}:6030/api/tabs/${tabId}`, {
+  fetch(`http://${DOMAIN_IP}:6030/api/tabs/${tabId}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body)
+  })
+}
+console.log(DOMAIN_IP)
+
+export const createNewOrder = (orderBasket, tabId, total, isPaid) => {
+  const body = {
+    "table_number": tabId,
+    "total": total,
+    "orders": formatBasketForDatabase(orderBasket),
+    "employees_id": 1,
+    "is_paid": isPaid
+  }
+  fetch(`http://${DOMAIN_IP}:6030/api/orders`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body)
+  })
+}
+
+export const updateReportings = (field, value) => {
+  let body = REPORTINGS_BODY
+  body[field] = value
+  fetch(`http://${DOMAIN_IP}:6030/api/reportings/0`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify(body)
   })
@@ -78,7 +121,6 @@ export const addItemsToExistingTab = (basket, tab, currentTabIndexPosition, tabL
   basket.forEach((basketItem, basketIndex) => {
     let edited = false
     tab.basket.forEach((tabItem, TabBasketIndex) => {
-        console.log(`${basketItem.label}: ${tabItem.label}`)
         if (tabItem.label === basketItem.label) {
           edited = true
           tabItem.quantity += basketItem.quantity
@@ -100,10 +142,6 @@ export const addItemsToExistingTab = (basket, tab, currentTabIndexPosition, tabL
   updatedTab.total = newTotal
   const updatedTabList = tabList.splice(currentTabIndexPosition, 1, updatedTab)
   return [updatedTabList, updatedTab]
-  
-}
-
-const createNewOrder = () => {
   
 }
 
